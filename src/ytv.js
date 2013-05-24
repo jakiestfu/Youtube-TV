@@ -134,11 +134,11 @@
             },
             prepare = {
                 youtube: function(fn){
-                    var tag = document.createElement('script');
+                    var tag = doc.createElement('script');
                     tag.src = "https://www.youtube.com/iframe_api";
-                    var firstScriptTag = document.getElementsByTagName('script')[0];
+                    var firstScriptTag = doc.getElementsByTagName('script')[0];
                     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                    window.onYouTubeIframeAPIReady = fn;
+                    win.onYouTubeIframeAPIReady = fn;
                 },
                 build: function(){
                     settings.element.className = "ytv-canvas";
@@ -271,7 +271,7 @@
                             },
                             playerVars: {
                                 enablejsapi: 1,
-                                origin: 'lab.jakiestfu.com',
+                                origin: doc.domain,
                                 controls: settings.controls ? 1 : 0,
                                 rel: 0,
                                 showinfo: 0,
