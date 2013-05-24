@@ -96,6 +96,14 @@ Exits Fullscreen Mode
 controller.fullscreen.exit();
 ```
 
+## jQuery Support
+
+YTV may be used as a jQuery plugin in the following fashion:
+
+```javascript
+$('#frame').ytv({opts});
+```
+
 <img src="http://i.imgur.com/pHPB5wS.png">
 
 ## Licensing
