@@ -1,5 +1,7 @@
 # YoutubeTV
-A script for creating and embedding slick Youtube Video playlists
+A small, slick, library independent YouTube User/Playlist player
+
+<img src="http://i.imgur.com/BTYZ5ur.png">
 
 ## Features
 * Library Independent
@@ -51,48 +53,52 @@ settings = {
 }
 ```
 
-* **`element`**: The element or element ID to apply the YouTube TV Player to
-* **`user`**: (String) The Username of the YouTube user you want to display videos from
-* **`playlist`**: (String) The Playlist ID you would like to load (Overrides `user`)
-* **`browsePlaylists`**: (Boolean) If `true` and the specified `user` has YouTube playlists, they will be accessible in the player by clicking the users Username
-* **`fullscreen`**: (Boolean) If `true`, the player will take up all the available space on the users browser screen
-* **`accent`**: (String) A CSS color string to apply to the accents of the player
-* **`controls`**: (Boolean) If `false`, the normal YouTube controls will be hidden.
-* **`annotations`**: (Boolean) If `false`, the annotations from the YouTube video will be hidden
-* **`autoplay`**: (Boolean) If `true`, the first video in the list will automatically play once the player has loaded
-* **`chainVideos`**: (Boolean) If `true`, the next video in que will automatically play after the current video has completed
-* **`events`**: The respective events will fire when key actions in the player have been called
+* `element`: The element or element ID to apply the YouTube TV Player to
+* `user`: (String) The Username of the YouTube user you want to display videos from
+* `playlist`: (String) The Playlist ID you would like to load (Overrides `user`)
+* `browsePlaylists`: (Boolean) If `true` and the specified `user` has YouTube playlists, they will be accessible in the player by clicking the users Username
+* `fullscreen`: (Boolean) If `true`, the player will take up all the available space on the users browser screen
+* `accent`: (String) A CSS color string to apply to the accents of the player
+* `controls`: (Boolean) If `false`, the normal YouTube controls will be hidden.
+* `annotations`: (Boolean) If `false`, the annotations from the YouTube video will be hidden
+* `autoplay`: (Boolean) If `true`, the first video in the list will automatically play once the player has loaded
+* `chainVideos`: (Boolean) If `true`, the next video in que will automatically play after the current video has completed
+* `events`: The respective events will fire when key actions in the player have been called
 
 
 ## Public Methods
 
-### `destroy`: Destroys the YouTube TV Player and all associated elements/events
+### `destroy`
+Destroys the YouTube TV Player and all associated elements/events
 
 ```javascript
 controller.destroy();
 ```
 
-### `fullscreen.state()`: Returns `true` if in Fullscreen Mode
+### `fullscreen.state()`
+Returns `true` if in Fullscreen Mode
 
 ```javascript
-snapper.fullscreen.state();
+controller.fullscreen.state();
 ```
 
-### `fullscreen.enter()`: Enters into Fullscreen Mode
+### `fullscreen.enter()`
+Enters into Fullscreen Mode
 
 ```javascript
-snapper.fullscreen.enter();
+controller.fullscreen.enter();
 ```
 
-### `fullscreen.exit()`: Exits Fullscreen Mode
+### `fullscreen.exit()`
+Exits Fullscreen Mode
 
 ```javascript
-snapper.fullscreen.exit();
+controller.fullscreen.exit();
 ```
+
+<img src="http://i.imgur.com/pHPB5wS.png">
 
 ## Licensing
-
-## License 
 **MIT Licensing**
 <p>Copyright (c) 2013 Jacob Kelley</p>
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
