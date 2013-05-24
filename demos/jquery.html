@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>YouTube TV</title>
+		<link href="../src/ytv.css" type="text/css" rel="stylesheet" />
+		<link href="assets/demo.css" type="text/css" rel="stylesheet" />
+		<style type="text/css">
+			body{
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		
+		<div id="frame"></div>
+		
+		<div class="description">
+			<p>This demo uses jQuery to active Youtube TV</p>
+		</div>
+		
+		<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+		<script type="text/javascript" src="../src/ytv.js"></script>
+		<script>
+			
+			$(window).load(function(){
+				
+				$('#frame').ytv({
+					user: 'streetleague',
+					accent: '#d51c18'
+				});
+				
+			});
+			
+		</script>
+	</body>
+</html>

@@ -1,0 +1,53 @@
+body{
+	background: #eee;
+	font-family: arial, sans-serif;
+	color: #222;
+	font-size: 16px;
+	}
+
+#frame, 
+.description{
+	margin: 50px auto;
+	width: 800px;
+	height: 400px;
+	}
+	
+.playlists .special{
+    position: absolute;
+    top: 50px;
+    left: 50%;
+    margin-left: 420px;
+	}
+
+.playlists .ytv-list-header > a{
+	-webkit-animation: pulse 2s infinite;
+	-moz-animation: pulse 2s infinite;
+	-o-animation: pulse 2s infinite;
+	animation: pulse 2s infinite;
+	}
+	.playlists .ytv-list-header.ytv-playlist-open > a{
+		-webkit-animation: none;
+		-moz-animation: none;
+		-o-animation: none;
+		animation: none;
+		}
+
+@-webkit-keyframes pulse {
+  0%   { background: rgba(255,255,255,0); }
+  50%  { background: rgba(255,255,255,0.1); }
+  100% { background: rgba(255,255,255,0); }
+}
+@-moz-keyframes pulse {
+  0%   { background: rgba(255,255,255,0); }
+  50%  { background: rgba(255,255,255,0.1); }
+  100% { background: rgba(255,255,255,0); }
+}
+@-o-keyframes pulse {
+  0%   { background: rgba(255,255,255,0); }
+  50%  { background: rgba(255,255,255,0.1); }
+  100% { background: rgba(255,255,255,0); }
+}
+@keyframes pulse {
+  0%   { background: rgba(255,255,255,0); }
+  50%  { background: rgba(255,255,255,0.1); }
+  100% { background: rgba(255,255,255,0); }

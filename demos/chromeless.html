@@ -1,0 +1,35 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>YouTube TV</title>
+		<link href="../src/ytv.css" type="text/css" rel="stylesheet" />
+		<link href="assets/demo.css" type="text/css" rel="stylesheet" />
+		<style type="text/css">
+			body{
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="frame"></div>
+		
+		<div class="description">
+			<p>This demo autoplays videos, removes Youtube player chrome, and sets a custom accent color</p>
+		</div>
+		
+		<script type="text/javascript" src="../src/ytv.js"></script>
+		<script>
+			window.onload = function(){
+				
+				window.controller = new YTV('frame', {
+					user: 'collegehumor',
+					accent: 'orange',
+					autoplay: true,
+					controls: false
+				});
+		
+			};
+		</script>
+	</body>
+</html>

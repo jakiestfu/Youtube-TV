@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>YouTube TV</title>
+		<link href="../src/ytv.css" type="text/css" rel="stylesheet" />
+		<link href="assets/demo.css" type="text/css" rel="stylesheet" />
+		<style type="text/css">
+			body{
+				margin: 0;
+				padding: 0;
+			}
+		</style>
+	</head>
+	<body>
+		<div id="frame"></div>
+		
+		<script type="text/javascript" src="../src/ytv.js"></script>
+		<script>
+			window.onload = function(){
+				
+				window.controller = new YTV('frame', {
+					user: 'smosh',
+					accent: 'hotpink',
+					autoplay: true,
+					controls: false,
+					fullscreen: true
+				});
+		
+			};
+		</script>
+	</body>
+</html>
