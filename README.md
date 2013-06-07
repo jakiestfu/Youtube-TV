@@ -12,6 +12,13 @@ A small, slick, library independent YouTube User/Playlist player
 * jQuery Support
 * Module Support
 
+## Demos
+* [Default Player Options](http://jakiestfu.github.io/Youtube-TV/demos/default.html)
+* [Chromeless Player](http://jakiestfu.github.io/Youtube-TV/demos/chromeless.html)
+* [Playlist Support](http://jakiestfu.github.io/Youtube-TV/demos/playlists.html)
+* [Full Screen Player](http://jakiestfu.github.io/Youtube-TV/demos/fullscreen.html) (Good for a .tv website?)
+* [jQuery Support](http://jakiestfu.github.io/Youtube-TV/demos/jquery.html)
+
 ## Installation
 
 Include both the `ytv.css` and `ytv.js` in your HTML file and you are good to go.
