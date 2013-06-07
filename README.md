@@ -3,6 +3,10 @@ A small, slick, library independent YouTube User/Playlist player
 
 <img src="http://i.imgur.com/BTYZ5ur.png">
 
+<a href="https://twitter.com/intent/tweet?hashtags=youtubetv&via=jakiestfu&url=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F&text=Youtube%20TV%3A%20A%20small%2C%20slick%2C%20library%20independent%20YouTube%20User%2FPlaylist%20player"><img src="http://jakiestfu.github.io/Youtube-TV/static/twit.png" target="_blank"></a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F"><img src="http://jakiestfu.github.io/Youtube-TV/static/fb.png" target="_blank"></a>
+
+
 ## Features
 * Library Independent
 * Customizable via CSS
@@ -119,3 +123,8 @@ $('#frame').ytv({opts});
 <p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
 <p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
 <p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+
+## Share Meh!
+<a href="https://twitter.com/intent/tweet?hashtags=youtubetv&via=jakiestfu&url=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F&text=Youtube%20TV%3A%20A%20small%2C%20slick%2C%20library%20independent%20YouTube%20User%2FPlaylist%20player"><img src="http://jakiestfu.github.io/Youtube-TV/static/twit.png" target="_blank"></a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F"><img src="http://jakiestfu.github.io/Youtube-TV/static/fb.png" target="_blank"></a>
