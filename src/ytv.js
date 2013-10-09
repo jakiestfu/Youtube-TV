@@ -288,9 +288,9 @@
                     videoClick: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv');
                         
-                        if(target && target.dataset){
+                        if(target){
                         
-                            if(target.dataset.ytv){
+                            if(target.getAttribute('data-ytv')){
                                 
                                 // Load Video
                                 utils.events.prevent(e);
@@ -301,7 +301,7 @@
                                     activeEls[i].className="";
                                 }
                                 target.parentNode.className="ytv-active";
-                                action.logic.loadVideo(target.dataset.ytv, true);
+                                action.logic.loadVideo(target.getAttribute('data-ytv'), true);
                                 
                             }
                         
@@ -310,7 +310,7 @@
                     playlistToggle: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv-playlist-toggle');
                         
-                        if(target && target.dataset && target.dataset.ytvPlaylistToggle){
+                        if(target && target.getAttribute('data-ytv-playlist-toggle')){
                             
                             // Toggle Playlist
                             utils.events.prevent(e);
@@ -325,12 +325,12 @@
                     playlistClick: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv-playlist');
                         
-                        if(target && target.dataset && target.dataset.ytvPlaylist){
+                        if(target && target.getAttribute('data-ytv-playlist')){
                             
                             // Load Playlist
                             utils.events.prevent(e);
                             
-                            settings.playlist = target.dataset.ytvPlaylist;
+                            settings.playlist = target.getAttribute('data-ytv-playlist');
                             target.children[1].innerHTML = 'Loading...';
                             
                             utils.ajax.get( utils.endpoints.playlistVids(), function(res){
