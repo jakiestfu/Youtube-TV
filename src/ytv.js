@@ -26,6 +26,7 @@
                 autoplay: false,
                 chainVideos: true,
                 browsePlaylists: false,
+                wmode: 'opaque',
                 events: {
                     videoReady: noop,
                     stateChange: noop
@@ -223,11 +224,15 @@
                                         isFirst = ' class="ytv-active"';
                                         first = video.slug;
                                     }
-                                    
+
                                     list += '<li'+isFirst+'><a href="#" data-ytv="'+(video.slug)+'" class="ytv-clear">';
                                     list += '<div class="ytv-thumb"><div class="ytv-thumb-stroke"></div><span>'+(time)+'</span><img src="'+(video.thumb)+'"></div>';
-                                    list += '<div class="ytv-content"><b>'+(video.title)+'</b><span class="ytv-views">'+utils.addCommas(video.stats.viewCount)+' Views</span></div>';
-                                    list += '</a></li>';
+                                    list += '<div class="ytv-content"><b>'+(video.title)+'</b>';
+                                    if (video.stats)
+                                    {
+                                        list+'</b><span class="ytv-views">'+utils.addCommas(video.stats.viewCount)+' Views</span>';
+                                    }
+                                    list += '</div></a></li>';
                                 }
                             }
                             list += '</ul></div>';
@@ -276,7 +281,8 @@
                                 rel: 0,
                                 showinfo: 0,
                                 iv_load_policy: settings.annotations ? '' : 3, 
-                                autoplay: autoplay ? 1 : 0
+                                autoplay: autoplay ? 1 : 0,
+                                wmode: settings.wmode
                             }
                         });
                         
@@ -288,9 +294,9 @@
                     videoClick: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv');
                         
-                        if(target && target.dataset){
+                        if(target){
                         
-                            if(target.dataset.ytv){
+                            if(target.getAttribute('data-ytv')){
                                 
                                 // Load Video
                                 utils.events.prevent(e);
@@ -301,7 +307,7 @@
                                     activeEls[i].className="";
                                 }
                                 target.parentNode.className="ytv-active";
-                                action.logic.loadVideo(target.dataset.ytv, true);
+                                action.logic.loadVideo(target.getAttribute('data-ytv'), true);
                                 
                             }
                         
@@ -310,7 +316,7 @@
                     playlistToggle: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv-playlist-toggle');
                         
-                        if(target && target.dataset && target.dataset.ytvPlaylistToggle){
+                        if(target && target.getAttribute('data-ytv-playlist-toggle')){
                             
                             // Toggle Playlist
                             utils.events.prevent(e);
@@ -325,12 +331,12 @@
                     playlistClick: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv-playlist');
                         
-                        if(target && target.dataset && target.dataset.ytvPlaylist){
+                        if(target && target.getAttribute('data-ytv-playlist')){
                             
                             // Load Playlist
                             utils.events.prevent(e);
                             
-                            settings.playlist = target.dataset.ytvPlaylist;
+                            settings.playlist = target.getAttribute('data-ytv-playlist');
                             target.children[1].innerHTML = 'Loading...';
                             
                             utils.ajax.get( utils.endpoints.playlistVids(), function(res){
