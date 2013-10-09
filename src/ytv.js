@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  
- * Version: 1.0.0
+ * Version: 1.0.2
  */
 /*jslint browser: true, undef:true, unused:true*/
 /*global define, module, ender */
