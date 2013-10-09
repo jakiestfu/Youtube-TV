@@ -223,11 +223,15 @@
                                         isFirst = ' class="ytv-active"';
                                         first = video.slug;
                                     }
-                                    
+
                                     list += '<li'+isFirst+'><a href="#" data-ytv="'+(video.slug)+'" class="ytv-clear">';
                                     list += '<div class="ytv-thumb"><div class="ytv-thumb-stroke"></div><span>'+(time)+'</span><img src="'+(video.thumb)+'"></div>';
-                                    list += '<div class="ytv-content"><b>'+(video.title)+'</b><span class="ytv-views">'+utils.addCommas(video.stats.viewCount)+' Views</span></div>';
-                                    list += '</a></li>';
+                                    list += '<div class="ytv-content"><b>'+(video.title)+'</b>';
+                                    if (video.stats)
+                                    {
+                                        list+'</b><span class="ytv-views">'+utils.addCommas(video.stats.viewCount)+' Views</span>';
+                                    }
+                                    list += '</div></a></li>';
                                 }
                             }
                             list += '</ul></div>';
