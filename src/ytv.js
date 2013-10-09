@@ -276,7 +276,8 @@
                                 rel: 0,
                                 showinfo: 0,
                                 iv_load_policy: settings.annotations ? '' : 3, 
-                                autoplay: autoplay ? 1 : 0
+                                autoplay: autoplay ? 1 : 0,
+                                wmode: 'transparent' 
                             }
                         });
                         
