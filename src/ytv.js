@@ -26,6 +26,7 @@
                 autoplay: false,
                 chainVideos: true,
                 browsePlaylists: false,
+                wmode: 'opaque',
                 events: {
                     videoReady: noop,
                     stateChange: noop
@@ -281,7 +282,7 @@
                                 showinfo: 0,
                                 iv_load_policy: settings.annotations ? '' : 3, 
                                 autoplay: autoplay ? 1 : 0,
-                                wmode: 'transparent' 
+                                wmode: settings.wmode
                             }
                         });
                         
