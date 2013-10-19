@@ -181,7 +181,7 @@
                             var list = '',
                                 user = {
                                     title: userInfo.entry.title.$t,
-                                    url: 'http://youtube.com/user/'+userInfo.entry.yt$username.display,
+                                    url: 'http://youtube.com/user/'+userInfo.entry.yt$username.$t,
                                     thumb: userInfo.entry.media$thumbnail.url,
                                     summary: userInfo.entry.summary.$t,
                                     subscribers: userInfo.entry.yt$statistics.subscriberCount,
