@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  
- * Version: 1.0.2
+ * Version: 1.0.3
  */
 /*jslint browser: true, undef:true, unused:true*/
 /*global define, module, ender */
@@ -134,12 +134,13 @@
                 }
             },
             prepare = {
-                youtube: function(fn){
-                    var tag = doc.createElement('script');
-                    tag.src = "https://www.youtube.com/iframe_api";
-                    var firstScriptTag = doc.getElementsByTagName('script')[0];
-                    firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
-                    win.onYouTubeIframeAPIReady = fn;
+                youtube: function(){                   
+					if(typeof YT=='undefined'){
+						var tag = doc.createElement('script');
+						tag.src = "https://www.youtube.com/iframe_api";
+						var firstScriptTag = doc.getElementsByTagName('script')[0];
+						firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+					}
                 },
                 build: function(){
                     settings.element.className = "ytv-canvas";
@@ -166,12 +167,12 @@
                         }
                         list += '</ul></div>';
                         
-                        var lh = doc.getElementsByClassName('ytv-list-header')[0],
+                        var lh = settings.element.getElementsByClassName('ytv-list-header')[0],
                             headerLink = lh.children[0];
                         headerLink.href="#";
                         headerLink.target="";
                         headerLink.setAttribute('data-ytv-playlist-toggle', 'true');
-                        doc.getElementsByClassName('ytv-list-header')[0].innerHTML += list;
+                        settings.element.getElementsByClassName('ytv-list-header')[0].innerHTML += list;
                         lh.className += ' ytv-has-playlists';
                     }
                 },
@@ -258,16 +259,17 @@
                     
                     loadVideo: function(slug, autoplay){
                         
-                        var house = doc.getElementsByClassName('ytv-video')[0];
-                        house.innerHTML = '<div id="ytv-video-player"></div>';
+                        var house = settings.element.getElementsByClassName('ytv-video')[0];
+						var counter = settings.element.getElementsByClassName('ytv-video-playerContainer').length;
+                        house.innerHTML = '<div id="ytv-video-player'+ counter +'" class="ytv-video-playerContainer"></div>';
                         
-                        cache.player = new YT.Player('ytv-video-player', {
+                        cache.player = new YT.Player('ytv-video-player'+counter, {
                             videoId: slug,
                             events: {
                                 onReady: settings.events.videoReady,
                                 onStateChange: function(e){
                                     if( (e.target.getPlayerState()===0) && settings.chainVideos ){
-                                        var ns = doc.getElementsByClassName('ytv-active')[0].nextSibling,
+                                        var ns = settings.element.getElementsByClassName('ytv-active')[0].nextSibling,
                                             link = ns.children[0];
                                         link.click();
                                     }
@@ -282,7 +284,7 @@
                                 showinfo: 0,
                                 iv_load_policy: settings.annotations ? '' : 3, 
                                 autoplay: autoplay ? 1 : 0,
-                                wmode: settings.wmode
+								wmode: settings.wmode
                             }
                         });
                         
@@ -293,15 +295,13 @@
                 endpoints: {
                     videoClick: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv');
-                        
-                        if(target){
-                        
+                        if(target){                        	
                             if(target.getAttribute('data-ytv')){
                                 
                                 // Load Video
                                 utils.events.prevent(e);
                                 
-                                var activeEls = doc.getElementsByClassName('ytv-active'),
+                                var activeEls = settings.element.getElementsByClassName('ytv-active'),
                                     i;
                                 for(i=0; i<activeEls.length; i++){
                                     activeEls[i].className="";
@@ -316,11 +316,11 @@
                     playlistToggle: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv-playlist-toggle');
                         
-                        if(target && target.getAttribute('data-ytv-playlist-toggle')){
+                       if(target && target.getAttribute('data-ytv-playlist-toggle')){
                             
                             // Toggle Playlist
                             utils.events.prevent(e);
-                            var lh = doc.getElementsByClassName('ytv-list-header')[0];
+                            var lh = settings.element.getElementsByClassName('ytv-list-header')[0];
                             if(lh.className.indexOf('ytv-playlist-open')===-1){
                                 lh.className += ' ytv-playlist-open';
                             } else {
@@ -340,7 +340,7 @@
                             target.children[1].innerHTML = 'Loading...';
                             
                             utils.ajax.get( utils.endpoints.playlistVids(), function(res){
-                                var lh = doc.getElementsByClassName('ytv-list-header')[0];
+                                var lh = settings.element.getElementsByClassName('ytv-list-header')[0];
                                 lh.className = lh.className.replace(' ytv-playlist-open', '');
                                 prepare.compileList(res);
                             });
@@ -372,13 +372,12 @@
             
             initialize = function(id, opts){
                 utils.deepExtend(settings, opts);
-                settings.element = (typeof id==='string') ? doc.getElementById(id) : id;
+				settings.element = (typeof id==='string') ? doc.getElementById(id) : id;
                 if(settings.element && settings.user){
-                    prepare.youtube(function(){
-                        prepare.build();
-                        action.bindEvents();
-                        utils.ajax.get( settings.playlist ? utils.endpoints.playlistVids() : utils.endpoints.userVids(), prepare.compileList );
-                    });
+                    prepare.youtube();
+					prepare.build();
+                    action.bindEvents();
+                    utils.ajax.get( settings.playlist ? utils.endpoints.playlistVids() : utils.endpoints.userVids(), prepare.compileList );
                 }
             };
             
@@ -424,8 +423,8 @@
     if ((typeof jQuery !== 'undefined')) {
         jQuery.fn.extend({
             ytv: function(options) {
-                return this.each(function() {
-                    new YTV(this, options);
+                return this.each(function() {                  
+					new YTV(this, options);
                 });
             }
         });
