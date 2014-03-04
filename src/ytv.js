@@ -231,7 +231,7 @@
                                     list += '<div class="ytv-content"><b>'+(video.title)+'</b>';
                                     if (video.stats)
                                     {
-                                        list+'</b><span class="ytv-views">'+utils.addCommas(video.stats.viewCount)+' Views</span>';
+                                        list+='</b><span class="ytv-views">'+utils.addCommas(video.stats.viewCount)+' Views</span>';
                                     }
                                     list += '</div></a></li>';
                                 }
