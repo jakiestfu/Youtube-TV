@@ -109,7 +109,7 @@
                     }
                 },
                 endpoints: {
-                    base: 'https://gdata.youtube.com/',
+                    base: '//gdata.youtube.com/',
                     userInfo: function(){
                         return utils.endpoints.base+'feeds/api/users/'+settings.user+'?v=2&alt=json';
                     },
@@ -224,7 +224,7 @@
                             var list = '',
                                 user = {
                                     title: userInfo.entry.title.$t,
-                                    url: 'https://youtube.com/user/'+userInfo.entry.yt$username.$t,
+                                    url: '//youtube.com/user/'+userInfo.entry.yt$username.$t,
                                     thumb: userInfo.entry.media$thumbnail.url,
                                     summary: userInfo.entry.summary.$t,
                                     subscribers: userInfo.entry.yt$statistics.subscriberCount,
