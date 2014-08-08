@@ -95,8 +95,6 @@
                             handle = new XDomainRequest();
                             handle.open("GET", url, true);
                             handle.onload = function () {
-                                console.log(handle);
-                                console.log(handle.responseText.slice(-100));
                                 fn.call(this, JSON.parse(handle.responseText));
                             };
                             handle.onprogress = function () {};
