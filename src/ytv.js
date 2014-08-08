@@ -5,7 +5,7 @@
  * Released under the MIT Licence
  * http://opensource.org/licenses/MIT
  *
- * Github:  
+ * Github:
  * Version: 1.0.2
  */
 /*jslint browser: true, undef:true, unused:true*/
@@ -32,7 +32,7 @@
                     stateChange: noop
                 }
             },
-            
+
             cache = {},
             utils = {
                 events: {
@@ -91,18 +91,34 @@
                 ajax: {
                     get: function(url, fn){
                         var handle;
-                        if (win.XMLHttpRequest){ 
-                            handle = new XMLHttpRequest(); 
-                        } else {
-                            handle = new ActiveXObject("Microsoft.XMLHTTP");
-                        }
-                        handle.onreadystatechange = function(){
-                            if (handle.readyState === 4 && handle.status === 200){
+                        if (win.XDomainRequest) {
+                            handle = new XDomainRequest();
+                            handle.open("GET", url, true);
+                            handle.onload = function () {
+                                console.log(handle);
+                                console.log(handle.responseText.slice(-100));
                                 fn.call(this, JSON.parse(handle.responseText));
+                            };
+                            handle.onprogress = function () {};
+                            handle.ontimeout = function () {};
+                            handle.onerror = function () {};
+                            setTimeout(function () {
+                                handle.send();
+                            }, 0);
+                        } else {
+                            if (win.XMLHttpRequest){
+                                handle = new XMLHttpRequest();
+                            } else {
+                                handle = new ActiveXObject("Microsoft.XMLHTTP");
                             }
-                        };
-                        handle.open("GET",url,true);
-                        handle.send();
+                            handle.onreadystatechange = function(){
+                                if (handle.readyState === 4 && handle.status === 200){
+                                    fn.call(this, JSON.parse(handle.responseText));
+                                }
+                            };
+                            handle.open("GET",url,true);
+                            handle.send();
+                        }
                     }
                 },
                 endpoints: {
@@ -165,7 +181,7 @@
                             list += '</a>';
                         }
                         list += '</ul></div>';
-                        
+
                         var lh = doc.getElementsByClassName('ytv-list-header')[0],
                             headerLink = lh.children[0];
                         headerLink.href="#";
@@ -199,7 +215,7 @@
                                     list += '<span>'+(user.title)+' <i class="ytv-arrow down"></i></span>';
                                 list += '</a>';
                             list += '</div>';
-                            
+
                             list += '<div class="ytv-list-inner"><ul>';
                             for(i=0; i<videos.length; i++){
                                 if(videos[i].media$group.yt$duration){
@@ -213,12 +229,12 @@
                                         duration: (videos[i].media$group.yt$duration.seconds),
                                         thumb: videos[i].media$group.media$thumbnail[1].url
                                     };
-                                    
+
                                     var date = new Date(null);
                                     date.setSeconds(video.duration);
                                     var timeSlots = (date.toTimeString().substr(0, 8)).split(':'),
                                         time = timeSlots[1] + ':' + timeSlots[2];
-                                    
+
                                     var isFirst = '';
                                     if(first===true){
                                         isFirst = ' class="ytv-active"';
@@ -237,30 +253,30 @@
                             }
                             list += '</ul></div>';
                             settings.element.innerHTML = '<div class="ytv-relative"><div class="ytv-video"><div id="ytv-video-player"></div></div><div class="ytv-list">'+list+'</div></div>';
-                            
+
                             action.logic.loadVideo(first, settings.autoplay);
-                            
+
                             if(settings.browsePlaylists){
                                 utils.ajax.get( utils.endpoints.userPlaylists(), prepare.playlists );
                             }
-                            
+
                         });
                     }
                 }
             },
             action = {
-                
+
                 logic: {
-                    
+
                     playerStateChange: function(d){
                         console.log(d);
                     },
-                    
+
                     loadVideo: function(slug, autoplay){
-                        
+
                         var house = doc.getElementsByClassName('ytv-video')[0];
                         house.innerHTML = '<div id="ytv-video-player"></div>';
-                        
+
                         cache.player = new YT.Player('ytv-video-player', {
                             videoId: slug,
                             events: {
@@ -280,27 +296,27 @@
                                 controls: settings.controls ? 1 : 0,
                                 rel: 0,
                                 showinfo: 0,
-                                iv_load_policy: settings.annotations ? '' : 3, 
+                                iv_load_policy: settings.annotations ? '' : 3,
                                 autoplay: autoplay ? 1 : 0,
                                 wmode: settings.wmode
                             }
                         });
-                        
+
                     }
-                    
+
                 },
-                
+
                 endpoints: {
                     videoClick: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv');
-                        
+
                         if(target){
-                        
+
                             if(target.getAttribute('data-ytv')){
-                                
+
                                 // Load Video
                                 utils.events.prevent(e);
-                                
+
                                 var activeEls = doc.getElementsByClassName('ytv-active'),
                                     i;
                                 for(i=0; i<activeEls.length; i++){
@@ -308,16 +324,16 @@
                                 }
                                 target.parentNode.className="ytv-active";
                                 action.logic.loadVideo(target.getAttribute('data-ytv'), true);
-                                
+
                             }
-                        
+
                         }
                     },
                     playlistToggle: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv-playlist-toggle');
-                        
+
                         if(target && target.getAttribute('data-ytv-playlist-toggle')){
-                            
+
                             // Toggle Playlist
                             utils.events.prevent(e);
                             var lh = doc.getElementsByClassName('ytv-list-header')[0];
@@ -330,15 +346,15 @@
                     },
                     playlistClick: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv-playlist');
-                        
+
                         if(target && target.getAttribute('data-ytv-playlist')){
-                            
+
                             // Load Playlist
                             utils.events.prevent(e);
-                            
+
                             settings.playlist = target.getAttribute('data-ytv-playlist');
                             target.children[1].innerHTML = 'Loading...';
-                            
+
                             utils.ajax.get( utils.endpoints.playlistVids(), function(res){
                                 var lh = doc.getElementsByClassName('ytv-list-header')[0];
                                 lh.className = lh.className.replace(' ytv-playlist-open', '');
@@ -362,14 +378,14 @@
                     });
                 },
                 bindEvents: function(){
-                    
+
                     utils.events.addEvent( settings.element, 'click', action.endpoints.videoClick );
                     utils.events.addEvent( settings.element, 'click', action.endpoints.playlistToggle );
                     utils.events.addEvent( settings.element, 'click', action.endpoints.playlistClick );
-                    
+
                 }
             },
-            
+
             initialize = function(id, opts){
                 utils.deepExtend(settings, opts);
                 settings.element = (typeof id==='string') ? doc.getElementById(id) : id;
@@ -381,7 +397,7 @@
                     });
                 }
             };
-            
+
             /*
              * Public
              */
@@ -407,7 +423,7 @@
                     }
                 }
             };
-            
+
         initialize(id, opts);
     };
     if ((typeof module !== 'undefined') && module.exports) {
