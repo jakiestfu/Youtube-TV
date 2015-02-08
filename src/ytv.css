@@ -25,7 +25,6 @@
 .ytv-video{
 	position: relative;
 	padding-bottom: 39.4%; /* 16:9 of 70%*/
-	position: absolute;
 	top: 0;
     right: 300px;
     bottom: 0;
