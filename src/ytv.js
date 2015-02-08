@@ -26,6 +26,7 @@
                 autoplay: false,
                 chainVideos: true,
                 browsePlaylists: false,
+                theme: 'dark',
                 wmode: 'opaque',
                 events: {
                     videoReady: noop,
@@ -282,6 +283,7 @@
                                 showinfo: 0,
                                 iv_load_policy: settings.annotations ? '' : 3, 
                                 autoplay: autoplay ? 1 : 0,
+                                theme: settings.theme,
                                 wmode: settings.wmode
                             }
                         });
