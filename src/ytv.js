@@ -152,17 +152,17 @@
                     // Optional Light List Theme
                     if(settings.listTheme == 'light'){
                         utils.addCSS( '.ytv-canvas{background: #ccc;}'
-                            + '.ytv-canvas ::-webkit-scrollbar{border-left: 1px solid rgba(204,204,204,0.5);}'
-                            + '.ytv-canvas ::-webkit-scrollbar-thumb{background: rgba(28,28,28,0.3);}'
-                            + '.ytv-list .ytv-active a{background: rgba(0,0,0,0.2);}'
-                            + '.ytv-list a{color: #282828;border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(204,204,204,0.5);}'
-                            + '.ytv-list-header .ytv-playlists a:hover{ background: rgba(0,0,0,0.2); }'
-                            + '.ytv-list-header .ytv-playlists a:active{ background: rgba(0,0,0,0.2); }'
-                            + '.ytv-list .ytv-thumb-stroke{outline: 1px solid rgba(0,0,0,0.1);}'
-                            + '.ytv-list .ytv-thumb{outline: 1px solid rgba(255,255,255,0.5);}'
-                            + '.ytv-list-header{-webkit-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); -moz-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);}'
-                            + '.ytv-list-header a{background: rgba(0,0,0,0.2);}'
-                            + '.ytv-playlists{background: #ccc;}'
+                            + ' .ytv-canvas ::-webkit-scrollbar{border-left: 1px solid rgba(28,28,28,0.1);}'
+                            + ' .ytv-canvas ::-webkit-scrollbar-thumb{background: rgba(28,28,28,0.3);}'
+                            + ' .ytv-list .ytv-active a{background: rgba(0,0,0,0.2);}'
+                            + ' .ytv-list a{color: #282828; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(204,204,204,0.5);}'
+                            + ' .ytv-list a:hover, .ytv-list-header .ytv-playlists a:hover{ background: rgba(0,0,0,0.2);}'
+                            + ' .ytv-list a:active, .ytv-list-header .ytv-playlists a:active{ background: rgba(0,0,0,0.2);}'
+                            + ' .ytv-list .ytv-thumb-stroke{outline: 1px solid rgba(0,0,0,0.1);}'
+                            + ' .ytv-list .ytv-thumb{outline: 1px solid rgba(255,255,255,0.5);}'
+                            + ' .ytv-list-header{-webkit-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); -moz-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);}'
+                            + ' .ytv-list-header a{background: rgba(0,0,0,0.2);}'
+                            + ' .ytv-playlists{background: #ccc;}'
                             );
                     }
                 },
