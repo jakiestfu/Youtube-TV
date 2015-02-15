@@ -28,6 +28,7 @@
                 browsePlaylists: false,
                 playerTheme: 'dark',
                 listTheme: 'dark',
+                responsive: false,
                 wmode: 'opaque',
                 events: {
                     videoReady: noop,
@@ -149,6 +150,30 @@
                         settings.element.className += " ytv-full";
                     }
                     utils.addCSS( '.ytv-list .ytv-active a{border-left-color: '+(settings.accent)+';}' );
+                    // Responsive CSS
+                    if(settings.responsive){
+                        utils.addCSS('.ytv-video{'
+                            +'position: relative; padding-bottom: 39.4%; /* 16:9 of 70%*/'
+                            +'height: 0; width: 70%;'
+                            +'} .ytv-video iframe{'
+                            +'position: absolute; top: 0; left: 0;'
+                            +'} .ytv-list{'
+                            +'width: 30%;'
+                            +'}'
+                            +'@media only screen and (max-width:992px) {'
+                            +'#'+id+' .ytv-list{'
+                            +'position: relative; display: block;'
+                            +'width: 0; padding-bottom: 40%;'
+                            +'left: auto; right: auto;'
+                            +'top: auto; width: 100%;'
+                            +'} #'+id+' .ytv-video{'
+                            +'position: relative; padding-bottom: 56.25%; /* 16:9 */'
+                            +'height: 0; position: relative;'
+                            +'display: block; left: auto;'
+                            +'right: auto; top: auto; width: 100%;'
+                            +'}}'
+                            );
+                    }
                     // Optional Light List Theme
                     if(settings.listTheme == 'light'){
                         utils.addCSS( '.ytv-canvas{background: #ccc;}'

@@ -15,6 +15,8 @@ A small, slick, library independent YouTube User/Playlist player
 * Supports Playlists and Users
 * jQuery Support
 * Module Support
+* Responsive Support
+* Alternative color scheme
 
 ## Demos
 * [Default Player Options](http://jakiestfu.github.io/Youtube-TV/demos/default.html)
@@ -22,6 +24,7 @@ A small, slick, library independent YouTube User/Playlist player
 * [Playlist Support](http://jakiestfu.github.io/Youtube-TV/demos/playlists.html)
 * [Full Screen Player](http://jakiestfu.github.io/Youtube-TV/demos/fullscreen.html) (Good for a .tv website?)
 * [jQuery Support](http://jakiestfu.github.io/Youtube-TV/demos/jquery.html)
+* [Responsive Support](http://jakiestfu.github.io/Youtube-TV/demos/responsive.html)
 
 ## Installation
 
@@ -57,6 +60,9 @@ settings = {
     autoplay: false,
     chainVideos: true,
     browsePlaylists: false,
+    playerTheme: 'dark',
+    listTheme: 'dark',
+    responsive: false,
     wmode: 'opaque',
     events: {
         videoReady: function(){},
@@ -75,6 +81,9 @@ settings = {
 * `annotations`: (Boolean) If `false`, the annotations from the YouTube video will be hidden
 * `autoplay`: (Boolean) If `true`, the first video in the list will automatically play once the player has loaded
 * `chainVideos`: (Boolean) If `true`, the next video in que will automatically play after the current video has completed
+* `playerTheme`: (String) Sets the youtube player theme. Default is `dark` with an alterative `light` color scheme.
+* `listTheme`: (String) Sets the playlist theme. Default is `dark` with a `light` theme to match the alternative player theme.
+* `responsive`: (Boolean) If `true`, it enables a responsive design to support various resolutions including mobile devices. Default currently `false`.
 * `wmode`: (String) Sets the Window Mode property for transparency, layering, and positioning in the browser. Values can be: `window` - movie plays in its own rectangular window on a web page. `opaque` - the movie hides everything on the page behind it. `transparent` - the background of the HTML page shows through all transparent portions of the movie, this may slow animation performance.
 * `events`: The respective events will fire when key actions in the player have been called
 
