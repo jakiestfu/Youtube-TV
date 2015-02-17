@@ -171,7 +171,7 @@
                             +'height: 0; position: relative;'
                             +'display: block; left: auto;'
                             +'right: auto; top: auto; width: 100%;'
-                            +'}}'
+                            +'} .ytv-playlist-open .ytv-arrow{top: 0px;}'
                             );
                     }
                     // Optional Light List Theme
