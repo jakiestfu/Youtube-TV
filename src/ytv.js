@@ -159,7 +159,8 @@
                             +'position: absolute; top: 0; left: 0;'
                             +'} .ytv-list{'
                             +'width: 30%;'
-                            +'}'
+                            +'} .ytv-playlist-open .ytv-arrow{'
+                            +'top: 0px;}'
                             +'@media only screen and (max-width:992px) {'
                             +'#'+id+' .ytv-list{'
                             +'position: relative; display: block;'
@@ -171,7 +172,7 @@
                             +'height: 0; position: relative;'
                             +'display: block; left: auto;'
                             +'right: auto; top: auto; width: 100%;'
-                            +'} .ytv-playlist-open .ytv-arrow{top: 0px;}}'
+                            +'}}'
                             );
                     }
                     // Optional Light List Theme
