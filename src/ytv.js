@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  
- * Version: 1.0.0
+ * Version: 1.0.2
  */
 /*jslint browser: true, undef:true, unused:true*/
 /*global define, module, ender */
@@ -26,6 +26,10 @@
                 autoplay: false,
                 chainVideos: true,
                 browsePlaylists: false,
+                playerTheme: 'dark',
+                listTheme: 'dark',
+                responsive: false,
+                wmode: 'opaque',
                 events: {
                     videoReady: noop,
                     stateChange: noop
@@ -105,7 +109,7 @@
                     }
                 },
                 endpoints: {
-                    base: 'http://gdata.youtube.com/',
+                    base: '//gdata.youtube.com/',
                     userInfo: function(){
                         return utils.endpoints.base+'feeds/api/users/'+settings.user+'?v=2&alt=json';
                     },
@@ -146,6 +150,46 @@
                         settings.element.className += " ytv-full";
                     }
                     utils.addCSS( '.ytv-list .ytv-active a{border-left-color: '+(settings.accent)+';}' );
+                    // Responsive CSS
+                    if(settings.responsive){
+                        utils.addCSS('.ytv-video{'
+                            +'position: relative; padding-bottom: 39.4%; /* 16:9 of 70%*/'
+                            +'height: 0; width: 70%;'
+                            +'} .ytv-video iframe{'
+                            +'position: absolute; top: 0; left: 0;'
+                            +'} .ytv-list{'
+                            +'width: 30%;'
+                            +'}'
+                            +'@media only screen and (max-width:992px) {'
+                            +'#'+id+' .ytv-list{'
+                            +'position: relative; display: block;'
+                            +'width: 0; padding-bottom: 40%;'
+                            +'left: auto; right: auto;'
+                            +'top: auto; width: 100%;'
+                            +'} #'+id+' .ytv-video{'
+                            +'position: relative; padding-bottom: 56.25%; /* 16:9 */'
+                            +'height: 0; position: relative;'
+                            +'display: block; left: auto;'
+                            +'right: auto; top: auto; width: 100%;'
+                            +'}}'
+                            );
+                    }
+                    // Optional Light List Theme
+                    if(settings.listTheme == 'light'){
+                        utils.addCSS( '.ytv-canvas{background: #ccc;}'
+                            + ' .ytv-canvas ::-webkit-scrollbar{border-left: 1px solid rgba(28,28,28,0.1);}'
+                            + ' .ytv-canvas ::-webkit-scrollbar-thumb{background: rgba(28,28,28,0.3);}'
+                            + ' .ytv-list .ytv-active a{background: rgba(0,0,0,0.2);}'
+                            + ' .ytv-list a{color: #282828; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(204,204,204,0.5);}'
+                            + ' .ytv-list a:hover, .ytv-list-header .ytv-playlists a:hover{ background: rgba(0,0,0,0.2);}'
+                            + ' .ytv-list a:active, .ytv-list-header .ytv-playlists a:active{ background: rgba(0,0,0,0.2);}'
+                            + ' .ytv-list .ytv-thumb-stroke{outline: 1px solid rgba(0,0,0,0.1);}'
+                            + ' .ytv-list .ytv-thumb{outline: 1px solid rgba(255,255,255,0.5);}'
+                            + ' .ytv-list-header{-webkit-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); -moz-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);}'
+                            + ' .ytv-list-header a{background: rgba(0,0,0,0.2);}'
+                            + ' .ytv-playlists{background: #ccc;}'
+                            );
+                    }
                 },
                 playlists: function(res){
                     if(res && res.feed){
@@ -180,7 +224,7 @@
                             var list = '',
                                 user = {
                                     title: userInfo.entry.title.$t,
-                                    url: 'http://youtube.com/user/'+userInfo.entry.yt$username.display,
+                                    url: '//youtube.com/user/'+userInfo.entry.yt$username.$t,
                                     thumb: userInfo.entry.media$thumbnail.url,
                                     summary: userInfo.entry.summary.$t,
                                     subscribers: userInfo.entry.yt$statistics.subscriberCount,
@@ -223,11 +267,15 @@
                                         isFirst = ' class="ytv-active"';
                                         first = video.slug;
                                     }
-                                    
+
                                     list += '<li'+isFirst+'><a href="#" data-ytv="'+(video.slug)+'" class="ytv-clear">';
                                     list += '<div class="ytv-thumb"><div class="ytv-thumb-stroke"></div><span>'+(time)+'</span><img src="'+(video.thumb)+'"></div>';
-                                    list += '<div class="ytv-content"><b>'+(video.title)+'</b><span class="ytv-views">'+utils.addCommas(video.stats.viewCount)+' Views</span></div>';
-                                    list += '</a></li>';
+                                    list += '<div class="ytv-content"><b>'+(video.title)+'</b>';
+                                    if (video.stats)
+                                    {
+                                        list+='</b><span class="ytv-views">'+utils.addCommas(video.stats.viewCount)+' Views</span>';
+                                    }
+                                    list += '</div></a></li>';
                                 }
                             }
                             list += '</ul></div>';
@@ -276,7 +324,9 @@
                                 rel: 0,
                                 showinfo: 0,
                                 iv_load_policy: settings.annotations ? '' : 3, 
-                                autoplay: autoplay ? 1 : 0
+                                autoplay: autoplay ? 1 : 0,
+                                theme: settings.playerTheme,
+                                wmode: settings.wmode
                             }
                         });
                         
@@ -288,9 +338,9 @@
                     videoClick: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv');
                         
-                        if(target && target.dataset){
+                        if(target){
                         
-                            if(target.dataset.ytv){
+                            if(target.getAttribute('data-ytv')){
                                 
                                 // Load Video
                                 utils.events.prevent(e);
@@ -301,7 +351,7 @@
                                     activeEls[i].className="";
                                 }
                                 target.parentNode.className="ytv-active";
-                                action.logic.loadVideo(target.dataset.ytv, true);
+                                action.logic.loadVideo(target.getAttribute('data-ytv'), true);
                                 
                             }
                         
@@ -310,7 +360,7 @@
                     playlistToggle: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv-playlist-toggle');
                         
-                        if(target && target.dataset && target.dataset.ytvPlaylistToggle){
+                        if(target && target.getAttribute('data-ytv-playlist-toggle')){
                             
                             // Toggle Playlist
                             utils.events.prevent(e);
@@ -325,12 +375,12 @@
                     playlistClick: function(e){
                         var target = utils.parentUntil(e.target ? e.target : e.srcElement, 'data-ytv-playlist');
                         
-                        if(target && target.dataset && target.dataset.ytvPlaylist){
+                        if(target && target.getAttribute('data-ytv-playlist')){
                             
                             // Load Playlist
                             utils.events.prevent(e);
                             
-                            settings.playlist = target.dataset.ytvPlaylist;
+                            settings.playlist = target.getAttribute('data-ytv-playlist');
                             target.children[1].innerHTML = 'Loading...';
                             
                             utils.ajax.get( utils.endpoints.playlistVids(), function(res){
