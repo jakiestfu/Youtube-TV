@@ -1,7 +1,7 @@
 # YoutubeTV
 A small, slick, library independent YouTube User/Playlist player
 
-<img src="http://i.imgur.com/BTYZ5ur.png">
+<img src="./demos/assets/images/default.png">
 
 <a href="https://twitter.com/intent/tweet?hashtags=youtubetv&via=jakiestfu&url=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F&text=Youtube%20TV%3A%20A%20small%2C%20slick%2C%20library%20independent%20YouTube%20User%2FPlaylist%20player"><img src="http://jakiestfu.github.io/Youtube-TV/static/twit.png" target="_blank"></a>
 <a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F"><img src="http://jakiestfu.github.io/Youtube-TV/static/fb.png" target="_blank"></a>
@@ -24,7 +24,7 @@ A small, slick, library independent YouTube User/Playlist player
 * [Playlist Support](http://jakiestfu.github.io/Youtube-TV/demos/playlists.html)
 * [Full Screen Player](http://jakiestfu.github.io/Youtube-TV/demos/fullscreen.html) (Good for a .tv website?)
 * [jQuery Support](http://jakiestfu.github.io/Youtube-TV/demos/jquery.html)
-* [Responsive Support](http://jakiestfu.github.io/Youtube-TV/demos/responsive.html)
+* [Responsive Support](http://giorgio003.github.io/Youtube-TV/demos/responsive.html)
 
 ## Installation
 
@@ -88,6 +88,12 @@ settings = {
 * `events`: The respective events will fire when key actions in the player have been called
 
 
+## Responsive Design
+
+<img src="./demos/assets/images/responsive1.png">
+
+<img src="./demos/assets/images/responsive2.png">
+
 ## Public Methods
 
 ### `destroy`
@@ -126,7 +132,7 @@ YTV may be used as a jQuery plugin in the following fashion:
 $('#frame').ytv({opts});
 ```
 
-<img src="http://i.imgur.com/pHPB5wS.png">
+<img src="./demos/assets/images/playlists.png">
 
 ## Licensing
 **MIT Licensing**
