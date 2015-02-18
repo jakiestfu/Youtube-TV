@@ -19,12 +19,24 @@ A small, slick, library independent YouTube User/Playlist player
 * Alternative color scheme
 
 ## Demos
-* [Default Player Options](http://jakiestfu.github.io/Youtube-TV/demos/default.html)
-* [Chromeless Player](http://jakiestfu.github.io/Youtube-TV/demos/chromeless.html)
-* [Playlist Support](http://jakiestfu.github.io/Youtube-TV/demos/playlists.html)
-* [Full Screen Player](http://jakiestfu.github.io/Youtube-TV/demos/fullscreen.html) (Good for a .tv website?)
-* [jQuery Support](http://jakiestfu.github.io/Youtube-TV/demos/jquery.html)
+* [Default Player Options](http://giorgio003.github.io/Youtube-TV/demos/default.html)
+* [Chromeless Player](http://giorgio003.github.io/Youtube-TV/demos/chromeless.html)
+* [Playlist Support](http://giorgio003.github.io/Youtube-TV/demos/playlists.html)
+* [Full Screen Player](http://giorgio003.github.io/Youtube-TV/demos/fullscreen.html) (Good for a .tv website?)
+* [jQuery Support](http://giorgio003.github.io/Youtube-TV/demos/jquery.html)
 * [Responsive Support](http://giorgio003.github.io/Youtube-TV/demos/responsive.html)
+
+## To-do list @Giorgio003
+
+- [x] Implement Responsive Design :iphone:
+- [x] Add additional colour scheme to match Youtube `light` player
+- [x] Create modular settings for responsiveness and themes
+- [ ] Merge remaining pending pull requests from Original
+- [ ] Update documentation (ongoing)
+- [ ] Convert to Youtube API v3 !important
+- [ ] Additional themes (or modular)?
+- [ ] Obtain More Coffee :coffee:
+- [ ] Any other suggestions welcome! :smiley:
 
 ## Installation
 
@@ -91,9 +103,11 @@ settings = {
 ## Responsive Design
 Youtube-TV can now adapt to various changes in resolution based on it's parent canvas/container. Currently set to `max-width:992px` to match Bootstrap's responsive transitions, but can be modified to match any other responsive boilerplate.
 
-### Playlist beside *(img resized on github -_-)*
+#### Playlist beside
+*(image resized on github don't be fooled >_<)*
 <img src="./demos/assets/images/responsive1.png">
-### Playlist on bottom
+#### Playlist on bottom
+*Better for mobile devices*
 <img src="./demos/assets/images/responsive2.png">
 
 ## Public Methods
