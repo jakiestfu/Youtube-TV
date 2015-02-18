@@ -89,9 +89,11 @@ settings = {
 
 
 ## Responsive Design
+Youtube-TV can now adapt to various changes in resolution based on it's parent canvas/container. Currently set to `max-width:992px` to match Bootstrap's responsive transitions, but can be modified to match any other responsive boilerplate.
 
+### Playlist beside *(img resized on github -_-)*
 <img src="./demos/assets/images/responsive1.png">
-
+### Playlist on bottom
 <img src="./demos/assets/images/responsive2.png">
 
 ## Public Methods
