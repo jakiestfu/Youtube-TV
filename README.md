@@ -21,14 +21,15 @@ A small, slick, library independent YouTube User/Playlist player
 * [Full Screen Player](http://giorgio003.github.io/Youtube-TV/demos/fullscreen.html) (Good for a .tv website?)
 * [jQuery Support](http://giorgio003.github.io/Youtube-TV/demos/jquery.html)
 * [Responsive Support](http://giorgio003.github.io/Youtube-TV/demos/responsive.html)
+* [Multiple Players](http://giorgio003.github.io/Youtube-TV/demos/multiplayer.html)
 
 ## To-do list @Giorgio003
 
 - [x] Implement Responsive Design :iphone:
 - [x] Add additional colour scheme to match Youtube `light` player
 - [x] Create modular settings for responsiveness and themes
-- [ ] Fix any multi-player issues.
-- [ ] Merge remaining pending pull requests from Original
+- [x] Allow multiple players
+- [x] Merge remaining pending pull requests from Original
 - [ ] Update documentation (ongoing)
 
 #### Youtube API v3
@@ -57,12 +58,25 @@ Include both the `ytv.css` and `ytv.js` in your HTML file and you are good to go
 ## Usage
 
 After your page has loaded, you may call the script like so:
-
+```html
+<div id="YourPlayerID"></div>
+```
 ```javascript
-var controller = new YTV(element, {
-	user: 'YoutubeUsername'
+document.addEventListener("DOMContentLoaded", function(event) {
+    var controller = new YTV('YourPlayerID', {
+	   user: 'YoutubeUsername'
+    });
 });
 ```
+##### OR
+```javascript
+window.onload = function(){
+    window.controller = new YTV('YourPlayerID', {
+        user: 'YoutubeUsername'
+    });
+};
+```
+
 
 `YTV` accepts two parameters. The first is a string of the element ID you want to use as the player, OR it may the element itself. The second parameter is an object of options defined below:
 
@@ -166,5 +180,5 @@ $('#frame').ytv({opts});
 
 
 ## Share Meh!
-<a href="https://twitter.com/intent/tweet?hashtags=youtubetv&via=jakiestfu&url=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F&text=Youtube%20TV%3A%20A%20small%2C%20slick%2C%20library%20independent%20YouTube%20User%2FPlaylist%20player"><img src="http://jakiestfu.github.io/Youtube-TV/static/twit.png" target="_blank"></a>
-<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F"><img src="http://jakiestfu.github.io/Youtube-TV/static/fb.png" target="_blank"></a>
+<a href="https://twitter.com/intent/tweet?hashtags=youtubetv&via=jakiestfu&url=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F&text=Youtube%20TV%3A%20A%20small%2C%20slick%2C%20library%20independent%20YouTube%20User%2FPlaylist%20player"><img src="./static/twit.png" target="_blank"></a>
+<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F"><img src="./static/fb.png" target="_blank"></a>
