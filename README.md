@@ -3,10 +3,6 @@ A small, slick, library independent YouTube User/Playlist player
 
 <img src="./demos/assets/images/default.png">
 
-<a href="https://twitter.com/intent/tweet?hashtags=youtubetv&via=jakiestfu&url=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F&text=Youtube%20TV%3A%20A%20small%2C%20slick%2C%20library%20independent%20YouTube%20User%2FPlaylist%20player"><img src="http://jakiestfu.github.io/Youtube-TV/static/twit.png" target="_blank"></a>
-<a href="https://www.facebook.com/sharer/sharer.php?u=https%3A%2F%2Fgithub.com%2Fjakiestfu%2FYoutube-TV%2F"><img src="http://jakiestfu.github.io/Youtube-TV/static/fb.png" target="_blank"></a>
-
-
 ## Features
 * Library Independent
 * Customizable via CSS
@@ -31,10 +27,21 @@ A small, slick, library independent YouTube User/Playlist player
 - [x] Implement Responsive Design :iphone:
 - [x] Add additional colour scheme to match Youtube `light` player
 - [x] Create modular settings for responsiveness and themes
+- [ ] Fix any multi-player issues.
 - [ ] Merge remaining pending pull requests from Original
 - [ ] Update documentation (ongoing)
+
+#### Youtube API v3
 - [ ] Convert to Youtube API v3 !important
-- [ ] Additional themes (or modular)?
+- [ ] v3 pageToken - pages + full list (snowliondev)
+
+#### Additional
+- [ ] Allow local testing (flag to add `http:` back)
+- [ ] FAQ/Fix common issues (Empty playlists, no uploads, etc.)
+- [ ] Load order, newest, random/shuffle.
+- [ ] Additional themes (or modular colour scheme)
+- [ ] Different Aspect ratios for responsive (4:3 for larger playist column)
+- [ ] Test IE 8-10 (Low Priority unless requested)
 - [ ] Obtain More Coffee :coffee:
 - [ ] Any other suggestions welcome! :smiley:
 

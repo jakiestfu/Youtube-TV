@@ -13,6 +13,7 @@
 
 (function(win, doc) {
     'use strict';
+    var local = ''; //For localhost testing set to 'http:', default is ''.
     var YTV = YTV || function(id, opts){
 
         var noop = function(){},
@@ -109,7 +110,7 @@
                     }
                 },
                 endpoints: {
-                    base: '//gdata.youtube.com/',
+                    base: local+'//gdata.youtube.com/',
                     userInfo: function(){
                         return utils.endpoints.base+'feeds/api/users/'+settings.user+'?v=2&alt=json';
                     },
@@ -225,7 +226,7 @@
                             var list = '',
                                 user = {
                                     title: userInfo.entry.title.$t,
-                                    url: '//youtube.com/user/'+userInfo.entry.yt$username.$t,
+                                    url: local+'//youtube.com/user/'+userInfo.entry.yt$username.$t,
                                     thumb: userInfo.entry.media$thumbnail.url,
                                     summary: userInfo.entry.summary.$t,
                                     subscribers: userInfo.entry.yt$statistics.subscriberCount,
