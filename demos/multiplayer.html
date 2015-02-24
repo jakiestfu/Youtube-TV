@@ -16,7 +16,7 @@
 	<body>
 		<div class="container">
 			<div class="col-md-offset-2">
-				<h1>This demo shows the player in a responsive template.</h1>
+				<h1>This demo shows the multiple players in a responsive template.</h1>
 			</div>
 			<div class="container">
 				<div class="col-md-9">
@@ -24,15 +24,20 @@
 				</div>
 				<div class="col-md-3">
 					<div class="description">
-						<p><h3>Responsive Demo</h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pretium varius gravida. Aliquam faucibus ex eget nunc semper, sit amet aliquet diam egestas. Nunc ultricies egestas augue. Aenean cursus, magna vel porttitor interdum, nisi nunc ultricies orci, quis rhoncus diam nisi sed massa. Sed tempor eros eget aliquet porttitor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eget maximus sapien. Nam sed ligula lectus. Donec a nunc elit.</p>
+						<p><h3>Multi-Responsive Demo</h3>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum pretium varius gravida. Aliquam faucibus ex eget nunc semper, sit amet aliquet diam egestas. Nunc ultricies egestas augue. Aenean cursus, magna vel porttitor interdum, nisi nunc ultricies orci, quis rhoncus diam nisi sed massa. Sed tempor eros eget aliquet porttitor. Lorem ipsum dolor sit amet, consectetur adipiscing elit. Vestibulum eget maximus sapien. Nam sed ligula lectus. Donec a nunc elit.</p>
 					</div>
 				</div>
 			</div>
 			<div class="col-md-offset-2">
 				<h4>&larr; Resize the window to see how the player adjusts. &rarr;</h4>
 			</div>
-			<div id="multi2"></div>
+			<div class="container">
+				<div class="col-md-12">
+					<div id="multi2"></div>
+				</div>
+			</div>
 		</div>
+		<br/>
 		
 		<script type="text/javascript" src="../src/ytv.js"></script>
 		<script>
@@ -42,18 +47,18 @@
 					accent: '#008D54',
 					browsePlaylists: true,
 					autoplay: false,
-					playerTheme: 'light',
-					listTheme: 'light',
+					playerTheme: 'dark',
+					listTheme: 'dark',
 					responsive: true
 				});
 
 				var player2 = new YTV('multi2', {
 					user: 'collegehumor',
-					accent: '#orange',
+					accent: 'orange',
 					browsePlaylists: true,
 					autoplay: false,
-					playerTheme: 'dark',
-					listTheme: 'dark',
+					playerTheme: 'light',
+					listTheme: 'light',
 					responsive: true
 				});
 		

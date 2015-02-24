@@ -151,17 +151,17 @@
                     if(settings.fullscreen){
                         settings.element.className += " ytv-full";
                     }
-                    utils.addCSS( '.ytv-list .ytv-active a{border-left-color: '+(settings.accent)+';}' );
+                    utils.addCSS( '#'+id+' .ytv-list .ytv-active a{border-left-color: '+(settings.accent)+';}' );
                     // Responsive CSS
                     if(settings.responsive){
-                        utils.addCSS('.ytv-video{'
+                        utils.addCSS('#'+id+' .ytv-video{'
                             +'position: relative; padding-bottom: 39.4%; /* 16:9 of 70%*/'
                             +'height: 0; width: 70%;'
-                            +'} .ytv-video iframe{'
+                            +'} #'+id+' .ytv-video iframe{'
                             +'position: absolute; top: 0; left: 0;'
-                            +'} .ytv-list{'
+                            +'} #'+id+' .ytv-list{'
                             +'width: 30%;'
-                            +'} .ytv-playlist-open .ytv-arrow{'
+                            +'} #'+id+' .ytv-playlist-open .ytv-arrow{'
                             +'top: 0px;}'
                             +'@media only screen and (max-width:992px) {'
                             +'#'+id+' .ytv-list{'
@@ -179,18 +179,18 @@
                     }
                     // Optional Light List Theme
                     if(settings.listTheme == 'light'){
-                        utils.addCSS( '.ytv-canvas{background: #ccc;}'
-                            + ' .ytv-canvas ::-webkit-scrollbar{border-left: 1px solid rgba(28,28,28,0.1);}'
-                            + ' .ytv-canvas ::-webkit-scrollbar-thumb{background: rgba(28,28,28,0.3);}'
-                            + ' .ytv-list .ytv-active a{background: rgba(0,0,0,0.2);}'
-                            + ' .ytv-list a{color: #282828; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(204,204,204,0.5);}'
-                            + ' .ytv-list a:hover, .ytv-list-header .ytv-playlists a:hover{ background: rgba(0,0,0,0.2);}'
-                            + ' .ytv-list a:active, .ytv-list-header .ytv-playlists a:active{ background: rgba(0,0,0,0.2);}'
-                            + ' .ytv-list .ytv-thumb-stroke{outline: 1px solid rgba(0,0,0,0.1);}'
-                            + ' .ytv-list .ytv-thumb{outline: 1px solid rgba(255,255,255,0.5);}'
-                            + ' .ytv-list-header{-webkit-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); -moz-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);}'
-                            + ' .ytv-list-header a{background: rgba(0,0,0,0.2);}'
-                            + ' .ytv-playlists{background: #ccc;}'
+                        utils.addCSS( ' #'+id+'.ytv-canvas{background: #ccc;}'
+                            + ' #'+id+'.ytv-canvas ::-webkit-scrollbar{border-left: 1px solid rgba(28,28,28,0.1);}'
+                            + ' #'+id+'.ytv-canvas ::-webkit-scrollbar-thumb{background: rgba(28,28,28,0.3);}'
+                            + ' #'+id+' .ytv-list .ytv-active a{background: rgba(0,0,0,0.2);}'
+                            + ' #'+id+' .ytv-list a{color: #282828; border-top: 1px solid rgba(0,0,0,0.1); border-bottom: 1px solid rgba(204,204,204,0.5);}'
+                            + ' #'+id+' .ytv-list a:hover, #'+id+' .ytv-list-header .ytv-playlists a:hover{ background: rgba(0,0,0,0.2);}'
+                            + ' #'+id+' .ytv-list a:active, #'+id+' .ytv-list-header .ytv-playlists a:active{ background: rgba(0,0,0,0.2);}'
+                            + ' #'+id+' .ytv-list .ytv-thumb-stroke{outline: 1px solid rgba(0,0,0,0.1);}'
+                            + ' #'+id+' .ytv-list .ytv-thumb{outline: 1px solid rgba(255,255,255,0.5);}'
+                            + ' #'+id+' .ytv-list-header{-webkit-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); -moz-box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2); box-shadow: 0 1px 2px rgba(255, 255, 255, 0.2);}'
+                            + ' #'+id+' .ytv-list-header a{background: rgba(0,0,0,0.2);}'
+                            + ' #'+id+' .ytv-playlists{background: #ccc;}'
                             );
                     }
                 },
@@ -242,7 +242,7 @@
                             list += '<div class="ytv-list-header">';
                                 list += '<a href="'+(user.url)+'" target="_blank">';
                                     list += '<img src="'+(user.thumb)+'">';
-                                    list += '<span>'+(user.title)+' <i class="ytv-arrow down"></i></span>';
+                                    list += '<span><i class="ytv-arrow down"></i>'+(user.title)+'</span>';
                                 list += '</a>';
                             list += '</div>';
                             
@@ -306,9 +306,9 @@
                         
                         var house = settings.element.getElementsByClassName('ytv-video')[0];
 						var counter = settings.element.getElementsByClassName('ytv-video-playerContainer').length;
-                        house.innerHTML = '<div id="ytv-video-player'+ counter +'" class="ytv-video-playerContainer"></div>';
+                        house.innerHTML = '<div id="ytv-video-player'+id+counter+'" class="ytv-video-playerContainer"></div>';
                         
-                        cache.player = new YT.Player('ytv-video-player'+counter, {
+                        cache.player = new YT.Player('ytv-video-player'+id+counter, {
                             videoId: slug,
                             events: {
                                 onReady: settings.events.videoReady,
