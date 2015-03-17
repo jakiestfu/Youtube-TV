@@ -37,7 +37,7 @@ A small, slick, library independent YouTube User/Playlist player
 - [ ] v3 pageToken - pages + full list (snowliondev)
 
 #### Additional
-- [ ] Allow local testing (flag to add `http:` back)
+- [ ] Allow local testing (flag `http:` when testing locally)
 - [ ] FAQ/Fix common issues (Empty playlists, no uploads, etc.)
 - [ ] Load order, newest, random/shuffle.
 - [ ] Additional themes (or modular colour scheme)
