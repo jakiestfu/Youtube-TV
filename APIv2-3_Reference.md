@@ -21,7 +21,6 @@ plid | .yt$playlistId.$t | .id
 thumb | .media$group.media$thumbnail[1].url | .snippet.thumbnails.medium.url
 
 #### User (channel) Info
-user
 
 user = | userInfo.entry
 ------ | -------------- 
@@ -35,7 +34,7 @@ thumb | .media$thumbnail.url | .snippet.thumbnails.default.url
 summary | .summary.$t | .snippet.description
 subscribers | .yt$statistics.subscriberCount | .statistics.subscriberCount
 views | .yt$statistics.totalUploadViews | .statistics.viewCount
-`NEW` | - | -
+**`NEW`** | - | -
 uploads | n/a | .contentDetails.relatedPlaylists.uploads
 
 To support newer accounts by using channel ID instead of user ID.
@@ -46,7 +45,7 @@ To support newer accounts by using channel ID instead of user ID.
 
 playlistVideos = | n/a
 ---------------- | ---
- | res.feed.items
+ | **res.feed.items**
 
 `plistlistVideos[i]`
 
@@ -61,7 +60,7 @@ videos = data.feed.entry
 
 videos = | data.feed.entry
 -------- | --------------- 
- | data.feed.items
+ | **data.feed.items**
 
 `videos[i]`
 
@@ -75,25 +74,25 @@ rating | .yt$rating | n/a *see statistics
 stats | .yt$statistics | .statistics
 duration | ( .media$group.yt$duration.seconds) | .contentDetails.duration
 thumb | .media$group.media$thumbnail[1].url | .snippet.thumbnails.medium.url
-`NEW` | - | -
+**`NEW`** | - | -
 embed | n/a | .status.embeddable
 
-base: 	local+'//gdata.youtube.com/'
-		'https://www.googleapis.com/youtube/v3/' *https required
-
+## Updated URLs
 #### base 
 
 base = | `local+'//gdata.youtube.com/'` 
 ------ | ----------------------------
  | **`'https://www.googleapis.com/youtube/v3/'`**
 
+*\*https required*
+
 #### userInfo
-**Before:**  
-	utils.endpoints.base+'feeds/api/users/'+settings.user+'?v=2&alt=json';
-
-**After:**  
-	utils.endpoints.base+'channels?'+settings.user+'&key='+apiKey+'&part=snippet,contentDetails,statistics';
-
+```
+Before:  
+utils.endpoints.base+'feeds/api/users/'+settings.user+'?v=2&alt=json';
+After:  
+utils.endpoints.base+'channels?'+settings.user+'&key='+apiKey+'&part=snippet,contentDetails,statistics';
+```
 **Required in Build**
 ```javascript
 if (settings.channelId){
@@ -104,28 +103,31 @@ if (settings.channelId){
 ```
 
 #### userVids
-**Before:**  
-	utils.endpoints.base+'feeds/api/users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
-
-**After:**  
-	utils.endpoints.base+'users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
+```
+Before:  
+utils.endpoints.base+'feeds/api/users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
+After:  
+utils.endpoints.base+'users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
+```
 
 #### userPlaylists
-**Before:**  
-	utils.endpoints.base+'feeds/api/users/'+settings.user+'/playlists/?v=2&alt=json&format=5&max-results=50';
-
-**After:**  
-	utils.endpoints.base+'playlists?channelId='+settings.channelId+'&key='+apiKey+'&maxResults=50&part=snippet';
+```
+Before:  
+utils.endpoints.base+'feeds/api/users/'+settings.user+'/playlists/?v=2&alt=json&format=5&max-results=50';
+After:  
+utils.endpoints.base+'playlists?channelId='+settings.channelId+'&key='+apiKey+'&maxResults=50&part=snippet';
+```
 
 #### playlistVids
-**Before:**  
-	utils.endpoints.base+'feeds/api/playlists/'+(settings.playlist)+'?v=2&alt=json&format=5&max-results=50';
-
-**After:**  
-	utils.endpoints.base+'playlistItems?playlistId='+settings.playlist+'&key='+apiKey+'&maxResults=50&part=contentDetails';
+```
+Before:  
+utils.endpoints.base+'feeds/api/playlists/'+(settings.playlist)+'?v=2&alt=json&format=5&max-results=50';
+After:  
+utils.endpoints.base+'playlistItems?playlistId='+settings.playlist+'&key='+apiKey+'&maxResults=50&part=contentDetails';
+```
 
 #### `NEW` videoInfo  
-	utils.endpoints.base+'videos?id='+settings.videos+'&key='+apiKey+ '&maxResults=50&part=snippet,contentDetails,status,statistics';
+`utils.endpoints.base+'videos?id='+settings.videos+'&key='+apiKey+'&maxResults=50&part=snippet,contentDetails,status,statistics';`
 
 ### Parsing the new time format - Reference
 ```javascript
