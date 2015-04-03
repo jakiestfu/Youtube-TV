@@ -37,9 +37,9 @@ views | .yt$statistics.totalUploadViews | .statistics.viewCount
 **`NEW`** | - | -
 uploads | n/a | .contentDetails.relatedPlaylists.uploads
 
-To support newer accounts by using channel ID instead of user ID.
-> Old: `url: local+'//youtube.com/user/'+userInfo.entry.yt$username.$t`
-> New: `url: 'https://youtube.com/channel/'+userInfo.id`
+To support newer accounts by using channel ID instead of user ID.  
+**Old:** `url: local+'//youtube.com/user/'+userInfo.entry.yt$username.$t`
+**New:** `url: 'https://youtube.com/channel/'+userInfo.id`
 
 #### `NEW` Playlist Videos
 
@@ -54,9 +54,6 @@ Element | Old Value | New Value
 slug | n/a | .snippet.videoid
 
 #### Video Info
-// data.feed  = playlist or uploaded
-videos = data.feed.entry
-			data.feed.items
 
 videos = | data.feed.entry
 -------- | --------------- 
@@ -84,7 +81,7 @@ base = | `local+'//gdata.youtube.com/'`
 ------ | ----------------------------
  | **`'https://www.googleapis.com/youtube/v3/'`**
 
-*\*https required*
+* *https required for APIv3*
 
 #### userInfo
 ```
