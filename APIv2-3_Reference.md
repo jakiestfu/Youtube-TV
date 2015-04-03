@@ -1,13 +1,18 @@
 #APIv2 to APIv3 Reference Notes
 
+Notes to reference for the conversion for a better understanding on what has changed for myself and others.
+
 ## Youtube-TV Elements Chart
 
-#### User (channel) Playlists
-playlists = res.feed.entry
-			res.feed.items
+Currently used elements in `ytv.js` and their new APIv3 counterparts.
 
-playlists | res.feed.entry | res.feed.items
---------- | -------------- | --------------
+#### User (channel) Playlists
+
+playlists = | res.feed.entry
+----------- | --------------
+ | **res.feed.items**
+
+`playlists[i]`
 
 Element | Old Value | New Value
 ------- | --------- | ---------
@@ -15,18 +20,12 @@ title | .title.$t | .snippet.title
 plid | .yt$playlistId.$t | .id
 thumb | .media$group.media$thumbnail[1].url | .snippet.thumbnails.medium.url
 
-playlists[i]	.title.$t 								(title)
-					.snippet.title
-				.yt$playlistId.$t 						(plid)
-					.id
-				.media$group.media$thumbnail[1].url 	(thumb)
-					.snippet.thumbnails.medium.url
-
 #### User (channel) Info
 user
 
-user | userInfo.entry | userInfo.items[0]
----- | -------------- | -----------------
+user = | userInfo.entry
+------ | -------------- 
+ | **userInfo.items[0]**
 
 Element | Old Value | New Value
 ------- | --------- | ---------
@@ -36,46 +35,35 @@ thumb | .media$thumbnail.url | .snippet.thumbnails.default.url
 summary | .summary.$t | .snippet.description
 subscribers | .yt$statistics.subscriberCount | .statistics.subscriberCount
 views | .yt$statistics.totalUploadViews | .statistics.viewCount
-NEW | - | -
+`NEW` | - | -
 uploads | n/a | .contentDetails.relatedPlaylists.uploads
 
-	userInfo.entry
-	userInfo.items[0]
-				.title.$t 								(title)
-					.snippet.title
-				.yt$username.$t 						(url: local+'//youtube.com/user/'+userInfo.entry.yt$username.$t)
-					.id 						(url: 'https://youtube.com/channel/'+userInfo.id)
-				.media$thumbnail.url 					(thumb)
-					.snippet.thumbnails.default.url
-				.summary.$t 							(summary)
-					.snippet.description
-				.yt$statistics.subscriberCount 			(subscribers)
-					.statistics.subscriberCount
-				.yt$statistics.totalUploadViews 		(views)
-					.statistics.viewCount
-
-				~ ADDED
-					.contentDetails.relatedPlaylists.uploads
+To support newer accounts by using channel ID instead of user ID.
+> Old: `url: local+'//youtube.com/user/'+userInfo.entry.yt$username.$t`
+> New: `url: 'https://youtube.com/channel/'+userInfo.id`
 
 #### `NEW` Playlist Videos
-playlistVideos = res.feed.items
 
-playlistVideos | n/a | res.feed.items
--------------- | --- | --------------
+playlistVideos = | n/a
+---------------- | ---
+ | res.feed.items
+
+`plistlistVideos[i]`
 
 Element | Old Value | New Value
 ------- | --------- | ---------
 slug | n/a | .snippet.videoid
-
-playlistVideos[i]	.snippet.videoid 					(slug)
 
 #### Video Info
 // data.feed  = playlist or uploaded
 videos = data.feed.entry
 			data.feed.items
 
-videos | data.feed.entry | data.feed.items
------- | --------------- | ---------------
+videos = | data.feed.entry
+-------- | --------------- 
+ | data.feed.items
+
+`videos[i]`
 
 Element | Old Value | New Value
 ------- | --------- | ---------
@@ -87,55 +75,23 @@ rating | .yt$rating | n/a *see statistics
 stats | .yt$statistics | .statistics
 duration | ( .media$group.yt$duration.seconds) | .contentDetails.duration
 thumb | .media$group.media$thumbnail[1].url | .snippet.thumbnails.medium.url
-NEW | - | -
+`NEW` | - | -
 embed | n/a | .status.embeddable
-
-
-videos[i]		.title.$t 								(title)
-					.snippet.title
-				*	.media$group.yt$videoid.$t 				(slug)
-				*		.snippet.videoId
-				.link[0].href 							(link)
-					## CREATE WITH VIDEO ID
-				.published.$t 							(published)
-					.snippet.publishedAt
-				.yt$rating 								(rating)
-					## now in statistics
-				.yt$statistics 							(stats)
-					.statistics
-			(	.media$group.yt$duration.seconds) 		(duration)
-					.contentDetails.duration
-				.media$group.media$thumbnail[1].url 	(thumb)
-					.snippet.thumbnails.medium.url
-				## NEW
-				.status.embeddable						(embed)
-
 
 base: 	local+'//gdata.youtube.com/'
 		'https://www.googleapis.com/youtube/v3/' *https required
 
 #### base 
 
-local+'//gdata.youtube.com/' | 'https://www.googleapis.com/youtube/v3/'
----------------------------- | ----------------------------------------
-
-userInfo: 	
-	utils.endpoints.base+'feeds/api/users/'+settings.user+'?v=2&alt=json';
-
-	#Build
-	if(settings.channelId){
-		settings.user = 'id='+settings.channelId;
-	} else if(settings.user){
-		settings.user = 'forUsername='+settings.user;
-	}
-	#endpoint
-	utils.endpoints.base+'channels?'+settings.user+'&key='+apiKey+'&part=snippet,contentDetails,statistics';
+base = | `local+'//gdata.youtube.com/'` 
+------ | ----------------------------
+ | **`'https://www.googleapis.com/youtube/v3/'`**
 
 #### userInfo
-**Before:**
+**Before:**  
 	utils.endpoints.base+'feeds/api/users/'+settings.user+'?v=2&alt=json';
 
-**After:**
+**After:**  
 	utils.endpoints.base+'channels?'+settings.user+'&key='+apiKey+'&part=snippet,contentDetails,statistics';
 
 **Required in Build**
@@ -147,52 +103,31 @@ if (settings.channelId){
 }
 ```
 
-userVids: 	
-	utils.endpoints.base+'feeds/api/users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
-
-	utils.endpoints.base+'users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
-
 #### userVids
-**Before:**
+**Before:**  
 	utils.endpoints.base+'feeds/api/users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
 
-**After:**
+**After:**  
 	utils.endpoints.base+'users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
-
-userPlaylists: 
-	utils.endpoints.base+'feeds/api/users/'+settings.user+'/playlists/?v=2&alt=json&format=5&max-results=50';
-
-	utils.endpoints.base+'playlists?channelId='+settings.channelId+'&key='+apiKey+ '&maxResults=50&part=snippet';
 
 #### userPlaylists
-**Before:**
+**Before:**  
 	utils.endpoints.base+'feeds/api/users/'+settings.user+'/playlists/?v=2&alt=json&format=5&max-results=50';
 
-**After:**
+**After:**  
 	utils.endpoints.base+'playlists?channelId='+settings.channelId+'&key='+apiKey+'&maxResults=50&part=snippet';
 
-playlistVids: 
-	utils.endpoints.base+'feeds/api/playlists/'+(settings.playlist)+'?v=2&alt=json&format=5&max-results=50';
-
-	utils.endpoints.base+'playlistItems?playlistId='+settings.playlist+'&key='+apiKey+ '&maxResults=50&part=contentDetails';
-
 #### playlistVids
-**Before:**
+**Before:**  
 	utils.endpoints.base+'feeds/api/playlists/'+(settings.playlist)+'?v=2&alt=json&format=5&max-results=50';
 
-**After:**
+**After:**  
 	utils.endpoints.base+'playlistItems?playlistId='+settings.playlist+'&key='+apiKey+'&maxResults=50&part=contentDetails';
 
-
-#### `NEW` videoInfo
+#### `NEW` videoInfo  
 	utils.endpoints.base+'videos?id='+settings.videos+'&key='+apiKey+ '&maxResults=50&part=snippet,contentDetails,status,statistics';
 
-
-videoInfo:
-	utils.endpoints.base+'videos?id='+settings.videos+'&key='+apiKey+ '&maxResults=50&part=snippet,contentDetails,status,statistics';
-
-
-### Parse new time format - Reference
+### Parsing the new time format - Reference
 ```javascript
 function parseDuration(duration) {
     var matches = duration.match(/[0-9]+[HMS]/g);
