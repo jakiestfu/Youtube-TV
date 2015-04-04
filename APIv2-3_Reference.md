@@ -38,7 +38,7 @@ views | .yt$statistics.totalUploadViews | .statistics.viewCount
 uploads | n/a | .contentDetails.relatedPlaylists.uploads
 
 To support newer accounts by using channel ID instead of user ID.  
-**Old:** `url: local+'//youtube.com/user/'+userInfo.entry.yt$username.$t`
+**Old:** `url: local+'//youtube.com/user/'+userInfo.entry.yt$username.$t`  
 **New:** `url: 'https://youtube.com/channel/'+userInfo.id`
 
 #### `NEW` Playlist Videos
@@ -51,7 +51,7 @@ playlistVideos = | n/a
 
 Element | Old Value | New Value
 ------- | --------- | ---------
-slug | n/a | .snippet.videoid
+slug | n/a | .contentDetails.videoId
 
 #### Video Info
 
@@ -64,7 +64,7 @@ videos = | data.feed.entry
 Element | Old Value | New Value
 ------- | --------- | ---------
 title | .title.$t | .snippet.title
-*slug | .media$group.yt$videoid.$t | .snippet.videoId
+*slug | .media$group.yt$videoid.$t | .id
 link | .link[0].href | n/a *use slug
 published | .published.$t | .snippet.publishedAt
 rating | .yt$rating | n/a *see statistics
@@ -88,14 +88,14 @@ base = | `local+'//gdata.youtube.com/'`
 Before:  
 utils.endpoints.base+'feeds/api/users/'+settings.user+'?v=2&alt=json';
 After:  
-utils.endpoints.base+'channels?'+settings.user+'&key='+apiKey+'&part=snippet,contentDetails,statistics';
+utils.endpoints.base+'channels?'+settings.cid+'&key='+apiKey+'&part=snippet,contentDetails,statistics';
 ```
 **Required in Build**
 ```javascript
 if (settings.channelId){
-    settings.user = 'id='+settings.channelId;
+    settings.cid = 'id='+settings.channelId;
 } else if(settings.user){
-    settings.user = 'forUsername='+settings.user;
+    settings.cid = 'forUsername='+settings.user;
 }
 ```
 
@@ -103,8 +103,16 @@ if (settings.channelId){
 ```
 Before:  
 utils.endpoints.base+'feeds/api/users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
-After:  
-utils.endpoints.base+'users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
+After:  n/a pulled playlistId pulled from userInfo
+```
+**Replaced with:**
+```javascript
+userUploads: function(userInfo){
+    if (userInfo && userInfo.items){
+        settings.playlist = userInfo.items[0].contentDetails.relatedPlaylists.uploads;
+        utils.ajax.get( utils.endpoints.playlistVids(), prepare.compileVideos );
+    }
+}
 ```
 
 #### userPlaylists
@@ -123,35 +131,55 @@ After:
 utils.endpoints.base+'playlistItems?playlistId='+settings.playlist+'&key='+apiKey+'&maxResults=50&part=contentDetails';
 ```
 
+#### `NEW` playlistInfo
+`utils.endpoints.base+'playlists?id='+settings.playlist+'&key='+apiKey+'&maxResults=50&part=snippet';`
+```javascript
+selectedPlaylist: function(playlistInfo){
+    if (playlistInfo && playlistInfo.items) {
+        settings.currentPlaylist = playlistInfo.items[0].snippet.title;
+        utils.ajax.get( utils.endpoints.playlistVids(), prepare.compileVideos );
+    }
+}
+```
+
 #### `NEW` videoInfo  
-`utils.endpoints.base+'videos?id='+settings.videos+'&key='+apiKey+'&maxResults=50&part=snippet,contentDetails,status,statistics';`
+`utils.endpoints.base+'videos?id='+settings.videoString+'&key='+apiKey+'&maxResults=50&part=snippet,contentDetails,status,statistics';`
+```javascript
+compileVideos: function(res){
+    if (res && res.items){
+        var playlists = res.items,
+        i;
+        settings.videoString = '';
+        for(i=0; i<playlists.length; i++){
+            settings.videoString += playlists[i].contentDetails.videoId;
+            if (i<playlists.length-1){ settings.videoString += ',';}
+        }
+        utils.ajax.get( utils.endpoints.videoInfo(), prepare.compileList );
+    }
+}
+```
 
 ### Parsing the new time format - Reference
 ```javascript
 function parseDuration(duration) {
-    var matches = duration.match(/[0-9]+[HMS]/g);
-
-    var seconds = 0;
+    var matches = video.duration.match(/[0-9]+[HMS]/g);
+    var h = 0, m = 0, s = 0, time = '';
 
     matches.forEach(function (part) {
         var unit = part.charAt(part.length-1);
         var amount = parseInt(part.slice(0,-1));
 
         switch (unit) {
-            case 'H':
-                seconds += amount*60*60;
-                break;
-            case 'M':
-                seconds += amount*60;
-                break;
-            case 'S':
-                seconds += amount;
-                break;
-            default:
-                // noop
+            case 'H': h = (amount > 9 ? '' + amount : '0' + amount); break;
+            case 'M': m = (amount > 9 ? '' + amount : '0' + amount); break;
+            case 'S': s = (amount > 9 ? '' + amount : '0' + amount); break;
+            default: // ??? profit
         }
     });
+    if (h){ time += h+':';}
+    if (m){ time += m+':';} else { time += '00:';}
+    if (s){ time += s;} else { time += '00';}
 
-    return seconds;
+    return time;
 }
 ```
