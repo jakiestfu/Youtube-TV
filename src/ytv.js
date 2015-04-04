@@ -13,6 +13,7 @@
 
 (function(win, doc) {
     'use strict';
+    var apiKey = 'AIzaSyCc6EA6M1iaYzC2pzyDitVNvmTU099LPbA';
     var local = ''; //For localhost testing set to 'http:', default is ''.
     var YTV = YTV || function(id, opts){
 
@@ -110,18 +111,21 @@
                     }
                 },
                 endpoints: {
-                    base: local+'//gdata.youtube.com/',
+                    base: 'https://www.googleapis.com/youtube/v3/',
                     userInfo: function(){
-                        return utils.endpoints.base+'feeds/api/users/'+settings.user+'?v=2&alt=json';
+                        return utils.endpoints.base+'channels?'+settings.cid+'&key='+apiKey+'&part=snippet,contentDetails,statistics';
                     },
-                    userVids: function(){
-                        return utils.endpoints.base+'feeds/api/users/'+settings.user+'/uploads/?v=2&alt=json&format=5&max-results=50';
+                    playlistInfo: function(){
+                        return utils.endpoints.base+'playlists?id='+settings.playlist+'&key='+apiKey+'&maxResults=50&part=snippet';
                     },
                     userPlaylists: function(){
-                        return utils.endpoints.base+'feeds/api/users/'+settings.user+'/playlists/?v=2&alt=json&format=5&max-results=50';
+                        return utils.endpoints.base+'playlists?channelId='+settings.channelId+'&key='+apiKey+'&maxResults=50&part=snippet';
                     },
                     playlistVids: function(){
-                        return utils.endpoints.base+'feeds/api/playlists/'+(settings.playlist)+'?v=2&alt=json&format=5&max-results=50';
+                        return utils.endpoints.base+'playlistItems?playlistId='+settings.playlist+'&key='+apiKey+'&maxResults=50&part=contentDetails';
+                    },
+                    videoInfo: function(){
+                        return utils.endpoints.base+'videos?id='+settings.videoString+'&key='+apiKey+'&maxResults=50&part=snippet,contentDetails,status,statistics';
                     }
                 },
                 deepExtend: function(destination, source) {
@@ -147,6 +151,11 @@
 					}
                 },
                 build: function(){
+                    if (settings.channelId){
+                        settings.cid = 'id='+settings.channelId;
+                    } else if(settings.user){
+                        settings.cid = 'forUsername='+settings.user;
+                    }
                     settings.element.className = "ytv-canvas";
                     if(settings.fullscreen){
                         settings.element.className += " ytv-full";
@@ -194,16 +203,40 @@
                             );
                     }
                 },
+                userUploads: function(userInfo){
+                    if (userInfo && userInfo.items){
+                        settings.playlist = userInfo.items[0].contentDetails.relatedPlaylists.uploads;
+                        utils.ajax.get( utils.endpoints.playlistVids(), prepare.compileVideos );
+                    }
+                },
+                selectedPlaylist: function(playlistInfo){
+                    if (playlistInfo && playlistInfo.items) {
+                        settings.currentPlaylist = playlistInfo.items[0].snippet.title;
+                        utils.ajax.get( utils.endpoints.playlistVids(), prepare.compileVideos );
+                    }
+                },
+                compileVideos: function(res){
+                    if (res && res.items){
+                        var playlists = res.items,
+                        i;
+                        settings.videoString = '';
+                        for(i=0; i<playlists.length; i++){
+                            settings.videoString += playlists[i].contentDetails.videoId;
+                            if (i<playlists.length-1){ settings.videoString += ',';}
+                        }
+                        utils.ajax.get( utils.endpoints.videoInfo(), prepare.compileList );
+                    }
+                },
                 playlists: function(res){
-                    if(res && res.feed){
+                    if(res && res.items){
                         var list = '<div class="ytv-playlists"><ul>',
-                            playlists = res.feed.entry,
+                            playlists = res.items,
                             i;
                         for(i=0; i<playlists.length; i++){
                             var data = {
-                                title: playlists[i].title.$t,
-                                plid: playlists[i].yt$playlistId.$t,
-                                thumb: playlists[i].media$group.media$thumbnail[1].url
+                                title: playlists[i].snippet.title,
+                                plid: playlists[i].id,
+                                thumb: playlists[i].snippet.thumbnails.medium.url
                             };
                             list += '<a href="#" data-ytv-playlist="'+(data.plid)+'">';
                                 list += '<div class="ytv-thumb"><div class="ytv-thumb-stroke"></div><img src="'+(data.thumb)+'"></div>';
@@ -222,22 +255,23 @@
                     }
                 },
                 compileList: function(data){
-                    if(data && data.feed){
+                    if(data && data.items){
                         utils.ajax.get( utils.endpoints.userInfo(), function(userInfo){
                             var list = '',
                                 user = {
-                                    title: userInfo.entry.title.$t,
-                                    url: local+'//youtube.com/user/'+userInfo.entry.yt$username.$t,
-                                    thumb: userInfo.entry.media$thumbnail.url,
-                                    summary: userInfo.entry.summary.$t,
-                                    subscribers: userInfo.entry.yt$statistics.subscriberCount,
-                                    views: userInfo.entry.yt$statistics.totalUploadViews
+                                    title: userInfo.items[0].snippet.title,
+                                    url: local+'//youtube.com/channel/'+userInfo.items[0].id,
+                                    thumb: userInfo.items[0].snippet.thumbnails.default.url,
+                                    summary: userInfo.items[0].snippet.description,
+                                    subscribers: userInfo.items[0].statistics.subscriberCount,
+                                    views: userInfo.items[0].statistics.viewCount
                                 },
-                                videos = data.feed.entry,
+                                videos = data.items,
                                 first = true,
                                 i;
-                            if(settings.playlist){
-                                user.title += ' &middot; '+(data.feed.media$group.media$title.$t);
+                            settings.channelId = userInfo.items[0].id; 
+                            if(settings.currentPlaylist){
+                                user.title += ' &middot; '+(settings.currentPlaylist);
                             }
                             list += '<div class="ytv-list-header">';
                                 list += '<a href="'+(user.url)+'" target="_blank">';
@@ -248,22 +282,34 @@
                             
                             list += '<div class="ytv-list-inner"><ul>';
                             for(i=0; i<videos.length; i++){
-                                if(videos[i].media$group.yt$duration){
+                                if(videos[i].status.embeddable){
                                     var video = {
-                                        title: videos[i].title.$t,
-                                        slug: videos[i].media$group.yt$videoid.$t,
-                                        link: videos[i].link[0].href,
-                                        published: videos[i].published.$t,
-                                        rating: videos[i].yt$rating,
-                                        stats: videos[i].yt$statistics,
-                                        duration: (videos[i].media$group.yt$duration.seconds),
-                                        thumb: videos[i].media$group.media$thumbnail[1].url
+                                        title: videos[i].snippet.title,
+                                        slug: videos[i].id,
+                                        link: 'https://www.youtube.com/watch?v='+videos[i].id,
+                                        published: videos[i].snippet.publishedAt,
+                                        stats: videos[i].statistics,
+                                        duration: (videos[i].contentDetails.duration),
+                                        thumb: videos[i].snippet.thumbnails.medium.url
                                     };
                                     
-                                    var date = new Date(null);
-                                    date.setSeconds(video.duration);
-                                    var timeSlots = (date.toTimeString().substr(0, 8)).split(':'),
-                                        time = timeSlots[1] + ':' + timeSlots[2];
+                                    var matches = video.duration.match(/[0-9]+[HMS]/g);
+                                    var h = 0, m = 0, s = 0, time = '';
+
+                                    matches.forEach(function (part) {
+                                        var unit = part.charAt(part.length-1);
+                                        var amount = parseInt(part.slice(0,-1));
+
+                                        switch (unit) {
+                                            case 'H': h = (amount > 9 ? '' + amount : '0' + amount); break;
+                                            case 'M': m = (amount > 9 ? '' + amount : '0' + amount); break;
+                                            case 'S': s = (amount > 9 ? '' + amount : '0' + amount); break;
+                                            default: // ??? profit
+                                        }
+                                    });
+                                    if (h){ time += h+':';}
+                                    if (m){ time += m+':';} else { time += '00:';}
+                                    if (s){ time += s;} else { time += '00';}
                                     
                                     var isFirst = '';
                                     if(first===true){
@@ -283,7 +329,6 @@
                             }
                             list += '</ul></div>';
                             settings.element.innerHTML = '<div class="ytv-relative"><div class="ytv-video"><div id="ytv-video-player"></div></div><div class="ytv-list">'+list+'</div></div>';
-                            
                             action.logic.loadVideo(first, settings.autoplay);
                             
                             if(settings.browsePlaylists){
@@ -385,10 +430,10 @@
                             settings.playlist = target.getAttribute('data-ytv-playlist');
                             target.children[1].innerHTML = 'Loading...';
                             
-                            utils.ajax.get( utils.endpoints.playlistVids(), function(res){
+                            utils.ajax.get( utils.endpoints.playlistInfo(), function(res){
                                 var lh = settings.element.getElementsByClassName('ytv-list-header')[0];
                                 lh.className = lh.className.replace(' ytv-playlist-open', '');
-                                prepare.compileList(res);
+                                prepare.selectedPlaylist(res);
                             });
                         }
                     }
@@ -419,11 +464,13 @@
             initialize = function(id, opts){
                 utils.deepExtend(settings, opts);
 				settings.element = (typeof id==='string') ? doc.getElementById(id) : id;
-                if(settings.element && settings.user){
+                if(settings.element && (settings.user || settings.channelId)){
                     prepare.youtube();
 					prepare.build();
                     action.bindEvents();
-                    utils.ajax.get( settings.playlist ? utils.endpoints.playlistVids() : utils.endpoints.userVids(), prepare.compileList );
+                    settings.playlist ? 
+                        utils.ajax.get( utils.endpoints.playlistInfo(), prepare.selectedPlaylist ) : 
+                        utils.ajax.get( utils.endpoints.userInfo(), prepare.userUploads );
                 }
             };
             
