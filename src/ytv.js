@@ -372,11 +372,9 @@
             },
             
             initialize = function(id, opts){
-                console.log('init');
                 utils.deepExtend(settings, opts);
                 settings.element = (typeof id==='string') ? doc.getElementById(id) : id;
                 if(settings.element && settings.user){
-                    console.log('settings set');
                     prepare.youtube(function(){
                         prepare.build();
                         action.bindEvents();
