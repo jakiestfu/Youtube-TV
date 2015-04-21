@@ -1,4 +1,5 @@
 # YoutubeTV
+**NOW with API Version 3 Support!!**  
 A small, slick, library independent YouTube User/Playlist player
 
 <img src="./demos/assets/images/default.png">
@@ -32,7 +33,7 @@ To obtain your API Key you can follow this guide using steps 1 to 3.
 
 ## Installation
 
-After obtaining your API Key, fill it in `ytv.js` near the top via this line:
+After obtaining your API Key, fill it in `ytv.js` near the top via this line:  
 `var apiKey = 'YOUR_API_KEY_HERE';`
 
 Include both the `ytv.css` and `ytv.js` in your HTML file and you are good to go.
