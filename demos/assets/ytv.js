@@ -13,7 +13,7 @@
 
 (function(win, doc) {
     'use strict';
-    var apiKey = 'YOUR_API_KEY_HERE';
+    var apiKey = 'AIzaSyCc6EA6M1iaYzC2pzyDitVNvmTU099LPbA';
     var YTV = YTV || function(id, opts){
 
         var noop = function(){},
