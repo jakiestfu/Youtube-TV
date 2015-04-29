@@ -140,6 +140,9 @@
                     var firstScriptTag = doc.getElementsByTagName('script')[0];
                     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
                     win.onYouTubeIframeAPIReady = fn;
+                    if (win.onYouTubeIframeAPIReady) {
+						onYouTubeIframeAPIReady();
+					}
                 },
                 build: function(){
                     settings.element.className = "ytv-canvas";
