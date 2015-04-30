@@ -137,6 +137,7 @@
                 youtube: function(fn){
                     var tag = doc.createElement('script');
                     tag.src = "https://www.youtube.com/iframe_api";
+                    tag.setAttribute("id", "yt-api");
                     var firstScriptTag = doc.getElementsByTagName('script')[0];
                     firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
                     win.onYouTubeIframeAPIReady = fn;
@@ -394,6 +395,13 @@
                 utils.events.removeEvent( settings.element, 'click', action.endpoints.playlistClick );
                 settings.element.className = '';
                 settings.element.innerHTML = '';
+                window['YT'] = undefined;
+                window['YTConfig'] = undefined;
+                var widgetapi = document.getElementById("www-widgetapi-script");
+                var ytapi = document.getElementById("yt-api");
+                widgetapi.parentNode.removeChild(widgetapi);
+                ytapi.parentNode.removeChild(ytapi);
+
             };
             this.fullscreen = {
                 state: function(){
