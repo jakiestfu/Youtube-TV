@@ -32,6 +32,7 @@
                 listTheme: 'dark',
                 responsive: false,
                 wmode: 'opaque',
+				playId:'',
                 events: {
                     videoReady: noop,
                     stateChange: noop
@@ -317,10 +318,13 @@
                                     if (s){ time += s;} else { time += '00';}
                                     
                                     var isFirst = '';
-                                    if(first===true){
+									if(first===true){		
+										first = video.slug;
+									}
+									if(settings.playId==video.slug){
                                         isFirst = ' class="ytv-active"';
                                         first = video.slug;
-                                    }
+                                    }                           
 
                                     list += '<li'+isFirst+'><a href="#" data-ytv="'+(video.slug)+'" class="ytv-clear">';
                                     list += '<div class="ytv-thumb"><div class="ytv-thumb-stroke"></div><span>'+(time)+'</span><img src="'+(video.thumb)+'"></div>';
@@ -334,6 +338,9 @@
                             }
                             list += '</ul></div>';
                             settings.element.innerHTML = '<div class="ytv-relative"><div class="ytv-video"><div id="ytv-video-player"></div></div><div class="ytv-list">'+list+'</div></div>';
+							if(settings.element.getElementsByClassName('ytv-active').length==0){
+								settings.element.getElementsByTagName('li')[0].className = "ytv-active";								
+							}
                             action.logic.loadVideo(first, settings.autoplay);
                             
                             if(settings.browsePlaylists){
