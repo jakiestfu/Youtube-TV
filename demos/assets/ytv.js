@@ -115,14 +115,14 @@
                     userInfo: function(){
                         return utils.endpoints.base+'channels?'+settings.cid+'&key='+apiKey+'&part=snippet,contentDetails,statistics';
                     },
-                    playlistInfo: function(){
-                        return utils.endpoints.base+'playlists?id='+settings.playlist+'&key='+apiKey+'&maxResults=50&part=snippet';
+                    playlistInfo: function(pid){
+                        return utils.endpoints.base+'playlists?id='+pid+'&key='+apiKey+'&maxResults=50&part=snippet';
                     },
                     userPlaylists: function(){
                         return utils.endpoints.base+'playlists?channelId='+settings.channelId+'&key='+apiKey+'&maxResults=50&part=snippet';
                     },
                     playlistVids: function(){
-                        return utils.endpoints.base+'playlistItems?playlistId='+settings.playlist+'&key='+apiKey+'&maxResults=50&part=contentDetails';
+                        return utils.endpoints.base+'playlistItems?playlistId='+settings.pid+'&key='+apiKey+'&maxResults=50&part=contentDetails';
                     },
                     videoInfo: function(){
                         return utils.endpoints.base+'videos?id='+settings.videoString+'&key='+apiKey+'&maxResults=50&part=snippet,contentDetails,status,statistics';
@@ -210,13 +210,17 @@
                 },
                 userUploads: function(userInfo){
                     if (userInfo && userInfo.items){
-                        settings.playlist = userInfo.items[0].contentDetails.relatedPlaylists.uploads;
+                        settings.pid = userInfo.items[0].contentDetails.relatedPlaylists.uploads;
                         utils.ajax.get( utils.endpoints.playlistVids(), prepare.compileVideos );
                     }
                 },
                 selectedPlaylist: function(playlistInfo){
                     if (playlistInfo && playlistInfo.items) {
+                        if (!settings.channelId && !settings.user){
+                            settings.cid = ('id='+(settings.channelId = playlistInfo.items[0].snippet.channelId));
+                        }
                         settings.currentPlaylist = playlistInfo.items[0].snippet.title;
+                        settings.pid = playlistInfo.items[0].id;
                         utils.ajax.get( utils.endpoints.playlistVids(), prepare.compileVideos );
                     }
                 },
@@ -336,7 +340,9 @@
                             settings.element.innerHTML = '<div class="ytv-relative"><div class="ytv-video"><div id="ytv-video-player"></div></div><div class="ytv-list">'+list+'</div></div>';
                             action.logic.loadVideo(first, settings.autoplay);
                             
-                            if(settings.browsePlaylists){
+                            if (settings.playlist){
+                                utils.ajax.get( utils.endpoints.playlistInfo(settings.playlist), prepare.playlists );
+                            } else if(settings.browsePlaylists){
                                 utils.ajax.get( utils.endpoints.userPlaylists(), prepare.playlists );
                             }
                             
@@ -432,10 +438,10 @@
                             // Load Playlist
                             utils.events.prevent(e);
                             
-                            settings.playlist = target.getAttribute('data-ytv-playlist');
+                            settings.pid = target.getAttribute('data-ytv-playlist');
                             target.children[1].innerHTML = 'Loading...';
                             
-                            utils.ajax.get( utils.endpoints.playlistInfo(), function(res){
+                            utils.ajax.get( utils.endpoints.playlistInfo(settings.pid), function(res){
                                 var lh = settings.element.getElementsByClassName('ytv-list-header')[0];
                                 lh.className = lh.className.replace(' ytv-playlist-open', '');
                                 prepare.selectedPlaylist(res);
@@ -469,12 +475,12 @@
             initialize = function(id, opts){
                 utils.deepExtend(settings, opts);
 				settings.element = (typeof id==='string') ? doc.getElementById(id) : id;
-                if(settings.element && (settings.user || settings.channelId)){
+                if(settings.element && (settings.user || settings.channelId || settings.playlist)){
                     prepare.youtube();
 					prepare.build();
                     action.bindEvents();
                     settings.playlist ? 
-                        utils.ajax.get( utils.endpoints.playlistInfo(), prepare.selectedPlaylist ) : 
+                        utils.ajax.get( utils.endpoints.playlistInfo(settings.playlist), prepare.selectedPlaylist ) : 
                         utils.ajax.get( utils.endpoints.userInfo(), prepare.userUploads );
                 }
             };
@@ -522,7 +528,7 @@
         jQuery.fn.extend({
             ytv: function(options) {
                 return this.each(function() {                  
-					new YTV(this, options);
+					new YTV(this.id, options);
                 });
             }
         });

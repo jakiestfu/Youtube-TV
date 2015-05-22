@@ -31,6 +31,11 @@ As part of the update to [Youtube's API version 3](https://developers.google.com
 To obtain your API Key you can follow this guide using steps 1 to 3.
 [https://developers.google.com/youtube/v3/getting-started](https://developers.google.com/youtube/v3/getting-started)
 
+Then:
+4. under APIs & auth > Credentials > Create new Key > (Select) Browser Key
+5. (Recommended) Set any referrers to your domain to prevent unauthorized use of your key.
+6. (Optional) Additionally disabling any other unused APIs that are enabled.
+
 ## Installation
 
 After obtaining your API Key, fill it in `ytv.js` near the top via this line:  
@@ -56,19 +61,33 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 });
 ```
-##### OR
-```javascript
-window.onload = function(){
-    window.controller = new YTV('YourPlayerID', {
-        user: 'YoutubeUsername'
-    });
-};
-```
+**`Note:`** If you are using a newer YouTube channel you may have a **Channel ID** which may look similar to this: `UCXXXXXXXXXXXXXXXXXXXXXX`
+If so, use `channelId: 'UCXXXXXXXXXXXXXXXXXXXXXX'` to replace user!
 
+#### Additional Options
+
+Additional options you may wish to add to get started.
+
+In addition to `user` and `channelId` you can also use `playlist` ID's which can also replace `user` and `channelId` or work along side them.
+`playlist: 'PLAYLIST_ID_HERE'` 
+To chain multiple playlists together, separate them by comma's. Example:
+`playlist: 'PLAYLIST_ID1,PLAYLIST_ID2,PLAYLIST_ID3'`
+
+Add this to enable the responsive Youtube-TV player allowing the player to adjust from desktop resolution all the way to mobile devices.
+`responsive: true`
+
+Accent colour will appear beside the active video in the list. This will accept any CSS value from `#FFF` to `orange`.
+`accent: '#008D54'`
+
+If you prefer the `light` theme over the dark, add these 2 options (or mix 'n match if desired).
+`playerTheme: 'light'`
+`listTheme: 'light'`
+
+**Don't forget comma's between each option!**
 
 `YTV` accepts two parameters. The first is a string of the element ID you want to use as the player, OR it may the element itself. The second parameter is an object of options defined below:
 
-## Settings and Defaults
+## Settings, Defaults and Details
 ```javascript
 settings = {
     element: null,
@@ -96,7 +115,7 @@ settings = {
 * `element`: The element or element ID to apply the YouTube TV Player to
 * `user`: (String) The Username of the YouTube user you want to display videos from
 * `channelId`: (String) The Channel ID of the YouTube channel you want to display videos from (for newer accounts)
-* `playlist`: (String) The Playlist ID you would like to load (Overrides `user`)
+* `playlist`: (String) The Playlist ID(s) you would like to load separated by comma's (Overrides `user`)
 * `browsePlaylists`: (Boolean) If `true` and the specified `user` has YouTube playlists, they will be accessible in the player by clicking the users Username
 * `fullscreen`: (Boolean) If `true`, the player will take up all the available space on the users browser screen
 * `accent`: (String) A CSS color string to apply to the accents of the player
