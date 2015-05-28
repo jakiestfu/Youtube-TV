@@ -27,6 +27,7 @@
                 chainVideos: true,
                 browsePlaylists: false,
                 wmode: 'opaque',
+                reverse: false,
                 events: {
                     videoReady: noop,
                     stateChange: noop
@@ -204,6 +205,9 @@
                             list += '</div>';
                             
                             list += '<div class="ytv-list-inner"><ul>';
+
+                            if (settings.reverse) videos = videos.reverse();
+
                             for(i=0; i<videos.length; i++){
                                 if(videos[i].media$group.yt$duration){
                                     var video = {
