@@ -6,7 +6,7 @@
  * http://opensource.org/licenses/MIT
  *
  * Github:  
- * Version: 3.0.3
+ * Version: 3.0.4
  */
 /*jslint browser: true, undef:true, unused:true, laxbreak:true, loopfunc:true*/
 /*global define, module, ender */
@@ -32,6 +32,9 @@
 				listTheme: 'dark',
 				responsive: false,
 				playId:'',
+				sortList: false,
+				reverseList: false,
+				shuffleList: false,
 				wmode: 'opaque',
 				events: {
 					videoReady: noop,
@@ -39,7 +42,22 @@
 				}
 			},
 			
-			cache = {},
+			cache = {
+				data: {},
+				remove: function (url) {
+					delete cache.data[url];
+				},
+				exist: function (url) {
+					return cache.data.hasOwnProperty(url) && cache.data[url] !== null;
+				},
+				get: function (url) {
+					return cache.data[url];
+				},
+				set: function (url, data) {
+					cache.remove(url);
+					cache.data[url] = data;
+				}
+			},
 			utils = {
 				events: {
 					addEvent: function addEvent(element, eventName, func) {
@@ -87,7 +105,7 @@
 				},
 				parentUntil: function(el, attr) {
 					while (el.parentNode) {
-					   if (el.getAttribute && el.getAttribute(attr)){
+						if (el.getAttribute && el.getAttribute(attr)){
 							return el;
 						}
 						el = el.parentNode;
@@ -96,19 +114,36 @@
 				},
 				ajax: {
 					get: function(url, fn){
-						var handle;
-						if (win.XMLHttpRequest){ 
-							handle = new XMLHttpRequest(); 
+						if (cache.exist(url)) {
+							fn.call(this, JSON.parse(cache.get(url)));
 						} else {
-							handle = new ActiveXObject("Microsoft.XMLHTTP"); // Not used anymore, only for ancient versions of IE.
-						}
-						handle.onreadystatechange = function(){
-							if (handle.readyState === 4 && handle.status === 200){
-								fn.call(this, JSON.parse(handle.responseText));
+							var handle;
+							if (win.XDomainRequest) { // Proper CORS for IE8,9
+								handle = new XDomainRequest();
+								handle.onload = function(){
+									cache.set(url, handle.responseText);
+									fn.call(this, JSON.parse(handle.responseText));
+									if (Object.prototype.hasOwnProperty.call(JSON.parse(handle.responseText), 'error')){
+										cache.remove(url);
+										var e = JSON.parse(handle.responseText);
+										console.log('Youtube-TV Error: Youtube API Response: '+e.error.errors[0].reason+'\n'+ 'Details: '+e.error.errors[0].message);
+									}
+								};
+							} else if (win.XMLHttpRequest){ // Modern Browsers
+								handle = new XMLHttpRequest(); 
 							}
-						};
-						handle.open("GET",url,true);
-						handle.send();
+							handle.onreadystatechange = function(){
+								if (handle.readyState === 4 && handle.status === 200){
+									cache.set(url, handle.responseText);
+									fn.call(this, JSON.parse(handle.responseText));
+								} else if (handle.readyState === 4){
+									var e = JSON.parse(handle.responseText);
+									console.log('Youtube-TV Error: Youtube API Response: '+e.error.errors[0].reason+'\n'+ 'Details: '+e.error.errors[0].message);
+								}
+							};
+							handle.open("GET",url,true);
+							handle.send();
+						}
 					}
 				},
 				endpoints: {
@@ -210,23 +245,23 @@
 					}
 				},
 				userUploads: function(userInfo){
-					if (userInfo && userInfo.items){
+					if (userInfo && userInfo.items.length > 0){
 						settings.pid = userInfo.items[0].contentDetails.relatedPlaylists.uploads;
 						utils.ajax.get( utils.endpoints.playlistVids(), prepare.compileVideos );
-					}
+					} else console.log ('Youtube-TV Error: API returned no matches for: '+(settings.channelId ? settings.channelId : settings.user)+'\nPlease ensure it was entered correctly and in the appropriate field shown below. \nuser: \'username\' or channelId: \'UCxxxx...\'');
 				},
 				selectedPlaylist: function(playlistInfo){
-					if (playlistInfo && playlistInfo.items) {
+					if (playlistInfo && playlistInfo.items.length > 0) {
 						if (!settings.channelId && !settings.user){
 							settings.cid = ('id='+(settings.channelId = playlistInfo.items[0].snippet.channelId));
 						}
 						settings.currentPlaylist = playlistInfo.items[0].snippet.title;
 						settings.pid = playlistInfo.items[0].id;
 						utils.ajax.get( utils.endpoints.playlistVids(), prepare.compileVideos );
-					}
+					} else console.log ('Youtube-TV Error: API returned no matches for playlist(s): '+settings.playlist);
 				},
 				compileVideos: function(res){
-					if (res && res.items){
+					if (res && res.items.length > 0){
 						var playlists = res.items,
 						i;
 						settings.videoString = '';
@@ -235,10 +270,10 @@
 							if (i<playlists.length-1){ settings.videoString += ',';}
 						}
 						utils.ajax.get( utils.endpoints.videoInfo(), prepare.compileList );
-					}
+					} else console.log ('Youtube-TV Error: Empty playlist');
 				},
 				playlists: function(res){
-					if(res && res.items){
+					if(res && res.items.length > 0){
 						var list = '<div class="ytv-playlists"><ul>',
 							playlists = res.items,
 							i;
@@ -262,16 +297,16 @@
 						headerLink.setAttribute('data-ytv-playlist-toggle', 'true');
 						settings.element.getElementsByClassName('ytv-list-header')[0].innerHTML += list;
 						lh.className += ' ytv-has-playlists';
-					}
+					} else console.log ('Youtube-TV Error: Returned no playlists');
 				},
 				compileList: function(data){
-					if(data && data.items){
+					if(data && data.items.length > 0){
 						utils.ajax.get( utils.endpoints.userInfo(), function(userInfo){
 							var list = '',
 								user = {
 									title: userInfo.items[0].snippet.title,
 									url: '//youtube.com/channel/'+userInfo.items[0].id,
-									thumb: userInfo.items[0].snippet.thumbnails.default.url,
+									thumb: userInfo.items[0].snippet.thumbnails['default'].url,
 									summary: userInfo.items[0].snippet.description,
 									subscribers: userInfo.items[0].statistics.subscriberCount,
 									views: userInfo.items[0].statistics.viewCount
@@ -280,9 +315,13 @@
 								first = true,
 								i;
 							settings.channelId = userInfo.items[0].id; 
-							if(settings.currentPlaylist){
-								user.title += ' &middot; '+(settings.currentPlaylist);
+							if(settings.currentPlaylist) user.title += ' &middot; '+(settings.currentPlaylist);
+							if (settings.sortList) videos.sort(function(a,b){if(a.snippet.publishedAt > b.snippet.publishedAt) return -1;if(a.snippet.publishedAt < b.snippet.publishedAt) return 1;return 0;});
+							if (settings.reverseList) videos.reverse();
+							if (settings.shuffleList) {
+								videos = function (){for(var j, x, i = videos.length; i; j = Math.floor(Math.random() * i), x = videos[--i], videos[i] = videos[j], videos[j] = x);return videos;}();
 							}
+
 							list += '<div class="ytv-list-header">';
 								list += '<a href="'+(user.url)+'" target="_blank">';
 									list += '<img src="'+(user.thumb)+'">';
@@ -341,6 +380,8 @@
 							if(settings.element.getElementsByClassName('ytv-active').length===0){
 								settings.element.getElementsByTagName('li')[0].className = "ytv-active";
 							}
+							var active = settings.element.getElementsByClassName('ytv-active')[0];
+							active.parentNode.parentNode.scrollTop = active.offsetTop;
 							action.logic.loadVideo(first, settings.autoplay);
 							
 							if (settings.playlist){
@@ -350,7 +391,7 @@
 							}
 							
 						});
-					}
+					} else console.log ('Youtube-TV Error: Empty video list');
 				}
 			},
 			action = {
@@ -462,7 +503,7 @@
 					} else {
 						utils.ajax.get( utils.endpoints.userInfo(), prepare.userUploads );
 					}
-				}
+				} else console.log ('Youtube-TV Error: Missing either user, channelId, or playlist');
 			};
 
 			/* Public */

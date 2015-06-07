@@ -104,6 +104,10 @@ settings = {
     playerTheme: 'dark',
     listTheme: 'dark',
     responsive: false,
+    playId:'',
+    sortList: false,
+    reverseList: false,
+    shuffleList: false,
     wmode: 'opaque',
     events: {
         videoReady: function(){},
@@ -126,6 +130,10 @@ settings = {
 * `playerTheme`: (String) Sets the youtube player theme. Default is `dark` with an alterative `light` color scheme.
 * `listTheme`: (String) Sets the playlist theme. Default is `dark` with a `light` theme to match the alternative player theme.
 * `responsive`: (Boolean) If `true`, it enables a responsive design to support various resolutions including mobile devices. Default currently `false`.
+* `playId`: (String) On load this option will allow you to select the first video to play/display. Enter the id of the video you want to display. (ie. `.../watch?v=VIDEOID` to `playId: 'VIDEOID'`).
+* `sortList`: (Boolean) If `true`, this option will sort the video list by date uploaded.
+* `reverseList`: (Boolean) If `true`, this option will reverse order of the videos. (Can be combined with other sorting option to reverse after sorting).
+* `shuffleList`: (Boolean) If `true`, this option will shuffle the video list. (Useful for music playlists).
 * `wmode`: (String) Sets the Window Mode property for transparency, layering, and positioning in the browser. Values can be: `window` - movie plays in its own rectangular window on a web page. `opaque` - the movie hides everything on the page behind it. `transparent` - the background of the HTML page shows through all transparent portions of the movie, this may slow animation performance.
 * `events`: The respective events will fire when key actions in the player have been called
 
