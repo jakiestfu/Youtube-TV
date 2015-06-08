@@ -61,8 +61,18 @@ document.addEventListener("DOMContentLoaded", function(event) {
     });
 });
 ```
+**Technical Note:** Above `DOMContentLoaded` is preferred for speed on modern browsers (additionally works down to IE9). However the demos are mostly using `window.onload` which is a slower option but compatible with older browsers (IE8 or older). Good examples of this difference can be found [here (microsoft.com)](http://ie.microsoft.com/Testdrive/HTML5/DOMContentLoaded/Default.html) and [here (jspref.com)](http://jsperf.com/onload-vs-domcontentloaded/3)
+
 **`Note:`** If you are using a newer YouTube channel you may have a **Channel ID** which may look similar to this: `UCXXXXXXXXXXXXXXXXXXXXXX`
 If so, use `channelId: 'UCXXXXXXXXXXXXXXXXXXXXXX'` to replace user!
+
+#### User vs Channel ID
+By visiting the intended channel's Youtube home page. The URL should look like one of the following.
+##### User ID `user: ''`
+<img src="./demos/assets/images/user.png">
+
+##### Channel ID `channelId: ''`
+<img src="./demos/assets/images/channelid.png">
 
 #### Additional Options
 

@@ -35,23 +35,21 @@
 		
 		<script type="text/javascript" src="assets/ytv.js"></script>
 		<script>
-			window.onload = function(){
-				
-				window.controller = new YTV('testing', {
+			document.addEventListener("DOMContentLoaded", function(event) {
+				var controller = new YTV('testing', {
 					// channelId: 'UCg44zX42-GjMr5XqyK3RmsQ',
 					user: 'googlefiberofficial',
 					accent: 'lightblue',
 					// playerTheme: 'light',
 					// listTheme: 'light',
-					// playId: 'XTTtkisylQw',
+					playId: 'XTTtkisylQw',
 					// sortList: true,
 					// reverseList: true,
-					// shuffleList: true,
+					shuffleList: true,
 					browsePlaylists: true,
 					responsive: true
 				});
-		
-			};
+			});
 		</script>
 	</body>
 </html>
